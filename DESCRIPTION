@@ -1,0 +1,19 @@
+Package: biosensequality
+Title: A Data Quality Report Generator for NSSP BioSense Platform
+Version: 1.000
+Authors@R: person("Mark", "White", email = "markhwhiteii@gmail.com", role = c("aut", "cre"))
+Description: This package, developed at Kansas Department of Health and Environment, queries the NSSP BioSense Platform for a given date range and generates Excel documents to report on null fields, invalid fields, and emergency department record times.In addition, it can email to sources. 
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+  RODBC, 
+  dplyr (>= 0.7.0),
+  tidyr (>= 0.6.3),
+  magrittr (>= 1.5),
+  stringr (>= 1.2.0),
+  openxlsx,
+  readxl, 
+  emayili, 
+  ggplot2
+RoxygenNote: 7.1.0
