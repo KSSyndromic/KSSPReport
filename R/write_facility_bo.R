@@ -202,9 +202,9 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       sheet1<- addWorksheet(wb, "Summary")
       mergeCells(wb, sheet1, cols = 1:6, rows = 1)
       writeData(wb, sheet1,title , startRow=1, colNames = F) # write table title
-      writeDataTable(wb, sheet1, overall, firstColumn=TRUE,startRow=2, headerStyle=hs, bandedRows=TRUE) # write Completeness to table
-      setColWidths(wb, sheet1, 1:ncol(overall), "auto") # format sheet
-      freezePane(wb, sheet1, firstActiveRow=2) # format sheet
+      writeDataTable(wb, sheet1, overall, firstColumn=TRUE,startRow=2, headerStyle=hs, bandedRows=TRUE, colNames=TRUE,rowNames=FALSE) # write Completeness to table
+      setColWidths(wb, sheet1, 2:ncol(overall), "auto") # format sheet
+      freezePane(wb, sheet1, firstActiveRow=3) # format sheet
       writeDataTable(wb,sheet1,Lag,startCol=1,startRow=nrow+4, headerStyle=hs, colNames=TRUE,rowNames=FALSE) #write Timeliness to table
       
       ##colorcode sheet
@@ -229,7 +229,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       ##insert plot of mean weekly delay plot if the time interval greater than 14 days
       if (difftime(end1,start1,units = "day")>14){
       ggsave(file=paste0( filename, "_WeeklyDelay.png"),lag_graph(data,start1,end1),dpi = 300,path = directory,width=8, height=6, unit ="in")
-      insertImage(wb, sheet1, paste0( directory, "/", filename, "_WeeklyDelay.png"), startRow = (nrow+6), startCol = 1, width = 8, height = 6)
+      insertImage(wb, sheet1, paste0( directory, "/", filename, "_WeeklyDelay.png"), startRow = (nrow+8), startCol = 1, width = 8, height = 6)
       }
       
       # write sheet
