@@ -195,7 +195,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       colnames(Lag)[3:5]=c("% Visit Received in <24 Hr","% Visit Received in 24-48 Hr", "% Visit Received in >48 Hr")
       filename <- str_replace_all(name, "[^[a-zA-z\\s0-9]]", "") %>% # get rid of punctuation from faciltiy name
         str_replace_all("[\\s]", "_") # replace spaces with underscores
-      as.data.frame(title=paste("Syndromic Surveillance Quality Report for",gsub('_',' ',filename), "from",format(as.Date(start), "%b%d,%Y"), 'to', format(as.Date(start), "%b%d,%Y")))
+      title=as.data.frame(paste("Syndromic Surveillance Quality Report for",gsub('_',' ',filename), "from",format(as.Date(start), "%b%d,%Y"), 'to', format(as.Date(start), "%b%d,%Y")))
       ##create overall powerpoint
       wb <- createWorkbook()
       hs <- createStyle(fgFill="#4f81bd", halign="left", valign="top", textDecoration="bold", wrapText=TRUE)
