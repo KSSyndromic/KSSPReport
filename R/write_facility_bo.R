@@ -201,7 +201,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       hs <- createStyle(fgFill="#4f81bd", halign="left", valign="top", textDecoration="bold", wrapText=TRUE)
       sheet1<- addWorksheet(wb, "Summary")
       mergeCells(wb, sheet1, cols = 1:6, rows = 1)
-      writeDataTable(wb, sheet1,title , firstColumn=TRUE,startRow=1, headerStyle=hs, bandedRows=TRUE) # write table title
+      writeData(wb, sheet1,title , firstColumn=TRUE,startRow=1, colNames = F) # write table title
       writeDataTable(wb, sheet1, overall, firstColumn=TRUE,startRow=2, headerStyle=hs, bandedRows=TRUE) # write Completeness to table
       setColWidths(wb, sheet1, 1:ncol(overall), "auto") # format sheet
       freezePane(wb, sheet1, firstActiveRow=2) # format sheet
