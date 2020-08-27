@@ -22,8 +22,7 @@ write_facility_report(
   email_password = NA,
   personname = NA,
   title = NA,
-  phone = NA,
-  inline = F
+  phone = NA
 )
 }
 \arguments{
