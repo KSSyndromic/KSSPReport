@@ -205,7 +205,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       writeDataTable(wb, sheet1, overall, firstColumn=TRUE,startRow=2, headerStyle=hs, bandedRows=TRUE) # write Completeness to table
       setColWidths(wb, sheet1, 1:ncol(overall), "auto") # format sheet
       freezePane(wb, sheet1, firstActiveRow=2) # format sheet
-      writeDataTable(wb,sheet1,Lag,startCol=1,startRow=nrow+4, headerStyle=hs, colNames=TRUE,rowNames=FALSE,firstColumn=TRUE) #write Timeliness to table
+      writeDataTable(wb,sheet1,Lag,startCol=1,startRow=nrow+4, headerStyle=hs, colNames=TRUE,rowNames=FALSE) #write Timeliness to table
       
       ##colorcode sheet
       negStyle <- createStyle(fontColour = "#000000", bgFill = "#FFC7CE")
