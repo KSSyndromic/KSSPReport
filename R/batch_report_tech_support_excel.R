@@ -1,12 +1,12 @@
-#' Write NSSP BioSense Platform Data Quality Summary Reports for Multiple Facility, Use excel as input
+#' Batch Job To Create NSSP BioSense Platform Data Quality Summary Reports for All Kansas Facilities in Production for the Tech Support, Use excel as input
 #'
 #' @description
-#' This performs `write_facilty_report`  function for all . It will generate summary report for all specified facility.
-#' This function uses excel generated information but can be override by additionall inputs
+#' This function uses excel generated information but can be override by additional inputs
+#' This function iteratively performs `write_facilty_report`  function for all Kansas Facilities in production targeted toward tech supports. It will generate summary report for all specified facility.
 #' The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
-#' report and creates a table. The program can send out a report to designated email address
+#' report and creates a table. 
 #' @param input location of input.xlsx file.
-#' @param contact A datatable of 2 colomns, facility is the facility number, receiver is the receive email address
+#' @param facility_spreadsheet location of the facility spreadsheet xlsx
 #' @param username Your BioSense username, as a string. This is the same username you may use to log into RStudio or Adminer.
 #' @param password Your BioSense password, as a string. This is the same password you may use to log into RStudio or Adminer.
 #' @param table The table that you want to retrieve the data from, as a string.
@@ -29,66 +29,66 @@
 #' library(emayili)
 #' library(ggplot2)
 #' library(readxl)
-#' repeated_facility_excel("Input.xlsx", contact = contact)
+#' batch_report_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx")
 #' ##you can override fields from the input.xlsx
-#' repeated_facility_excel("Input.xlsx", contact = contact,field='age',email=F)
+#' batch_report_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx",email=F)
 #' @import dplyr
 #' @import tidyr
 #' @import readxl
 #' @export
 #' 
-repeated_facility_excel <- function(input, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,field=NA,exclude=NA,optional=T,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
+batch_report_tech_support_excel <- function(facility_spreadsheet,input, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,field=NA,optional=T,exclude=NA, directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
-  username <- as.character(Input[1,2])
+    username <- as.character(Input[1,2])
   }
   if (is.na(password)){
-  password <- as.character(Input[2,2])
+    password <- as.character(Input[2,2])
   }
   if (is.na(table)){
-  table <- as.character(Input[3,2])
+    table <- as.character(Input[3,2])
   }
   if(is.na(mft)){
-  mft <- as.character(Input[4,2])
+    mft <- as.character(Input[4,2])
   }
   if(is.na(start)){
-  start <- as.POSIXct(as.numeric(Input[5,2] ) *(60*60*24),origin= '1899-12-30')  
+    start <- as.POSIXct(as.numeric(Input[5,2] ) *(60*60*24),origin= '1899-12-30')  
   }
   if(is.na(end)){
-  end <- as.POSIXct(as.numeric(Input[6,2] ) *(60*60*24),origin= '1899-12-30')  
+    end <- as.POSIXct(as.numeric(Input[6,2] ) *(60*60*24),origin= '1899-12-30')  
   }
   if(is.na(directory)){
-  directory <- as.character(Input[8,2])
+    directory <- as.character(Input[8,2])
   }
   if(is.na(field)) {
-  field <- ifelse(is.na(Input[9,2]),NA, as.character(Input[9,2]))
+    field <- ifelse(is.na(Input[9,2]),NA, as.character(Input[9,2]))
   }
   if(is.na(exclude)) {
-  exclude <- ifelse(is.na(Input[10,2]),NA, as.character(Input[10,2]))
+    exclude <- ifelse(is.na(Input[10,2]),NA, as.character(Input[10,2]))
   }
   if(is.na(email)) {
-  email <-as.logical (Input[11,2])
+    email <-as.logical (Input[11,2])
   }
   if(is.na(sender)) {
-  sender<-as.character(Input[12,2])
+    sender<-as.character(Input[12,2])
   }
   if(is.na(email_password)) {
-  email_password <-as.character(Input[13,2])
+    email_password <-as.character(Input[13,2])
   }
   if(is.na(personname)) {
-  personname<-as.character(Input[15,2])
+    personname<-as.character(Input[15,2])
   }
   if(is.na(title)) {
-  title<- as.character(Input[16,2])
+    title<- as.character(Input[16,2])
   }
   if(is.na(phone)){
-  phone<- as.character(Input[17,2])
+    phone<- as.character(Input[17,2])
   }
-  repeated_facility_table(contact=contact, username=username, password=password, 
-                        table=table, mft=mft,
-                        start=start, 
-                        end=end,
-                        directory=directory,exclude=exclude,field=field,optional = optional,
-                        email =email, sender=sender,
-                        email_password=email_password,personname=personname,title=title, phone=phone)
+  batch_report_tech_support(facility_spreadsheet=facility_spreadsheet,contact=contact, username=username, password=password, 
+                     table=table, mft=mft,
+                     start=start, 
+                     end=end,
+                     directory=directory,field=field,exclude=exclude,optional=optional,
+                     email =email, sender=sender,
+                     email_password=email_password,personname=personname,title=title, phone=phone)
 }

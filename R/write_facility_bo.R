@@ -24,13 +24,6 @@
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
 #' @return A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent. 
-#' Common Trouble Shoots:
-#' | Error Message  | Solution |
-#' | ------------- | ------------- |
-#' | Error: Start time after end time  | Make sure start time occurs after endtime |
-#' | The query yielded no data. | The facility doesn't have data for the input time period |
-#' | 535 5.7.3 Authentication unsuccessful | Double check email address and password make sure to us @@kdhe.ks.gov|
-#' @md
 #' @examples 
 #' library(emayili)
 #' library(ggplot2)

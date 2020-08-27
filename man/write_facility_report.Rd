@@ -64,15 +64,9 @@ write_facility_report(
 }
 \value{
 A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent.
-Common Trouble Shoots:
-| Error Message  | Solution |
-| ------------- | ------------- |
-| Error: Start time after end time  | Make sure start time occurs after endtime |
-| The query yielded no data. | The facility doesn't have data for the input time period |
-| 535 5.7.3 Authentication unsuccessful | Double check email address and password make sure to us @kdhe.ks.gov|
 }
 \description{
-This function is a \code{write_reports} function. It will generate summary report for one specified facility.
+This function is a `write_reports` function. It will generate summary report for one specified facility.
 The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
 report and creates a table. The program can send out a report to designated email address
 }
