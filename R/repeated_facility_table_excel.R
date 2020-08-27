@@ -13,12 +13,12 @@
 #' library(emayili)
 #' library(ggplot2)
 #' library(readxl)
-#' repeated_facility_bo_excel("Input.xlsx", contact = contact)
+#' repeated_facility_excel("Input.xlsx", contact = contact)
 #' @import dplyr
 #' @import tidyr
 #' @import readxl
 #' @export
-repeated_facility_bo_excel <- function(input, contact){
+repeated_facility_excel <- function(input, contact){
   Input <- read_excel(input, col_names = FALSE)
   
   username <- as.character(Input[1,2])

@@ -81,13 +81,13 @@
 #' @import ggplot2
 #' @importFrom stringr str_replace_all
 #' @export
-write_facility_report <- function(username, password, table, mft, start, end, facility, directory="",field=NA, exclude=NA, optional=TRUE, email=FALSE, sender=NA,receiver=NA,email_password=NA, personname=NA,title=NA, phone=NA, inline=F ) {
-  
-  if (as.POSIXct(start)>as.POSIXct(end)){
+write_facility_report <- function(username, password, table, mft, start, end, facility, directory="",field=NA, exclude=NA, optional=TRUE, email=FALSE, sender=NA,receiver=NA,email_password=NA, personname=NA,title=NA, phone=NA) {
+      start1=as.POSIXct(start)
+    end1=as.POSIXct(end)
+  if (start1>end1){
     stop("Error: Start time after end time")
   } else {  
-    start1=as.POSIXct(start)
-    end1=as.POSIXct(end)
+
     channel <- odbcConnect("BioSense_Platform", paste0("BIOSENSE\\", username), password) # open channel
     data <- sqlQuery(
       channel,
@@ -193,15 +193,19 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
         Group3=t(Lag_Summary[3,3])
       )
       colnames(Lag)[3:5]=c("% Visit Received in <24 Hr","% Visit Received in 24-48 Hr", "% Visit Received in >48 Hr")
-      
+      filename <- str_replace_all(name, "[^[a-zA-z\\s0-9]]", "") %>% # get rid of punctuation from faciltiy name
+        str_replace_all("[\\s]", "_") # replace spaces with underscores
+      title=paste("Syndromic Surveillance Quality Report for",gsub('_',' ',filename), "from",format(as.Date(start), "%b%d,%Y"), 'to', format(as.Date(start), "%b%d,%Y"))
       ##create overall powerpoint
       wb <- createWorkbook()
       hs <- createStyle(fgFill="#4f81bd", halign="left", valign="top", textDecoration="bold", wrapText=TRUE)
       sheet1<- addWorksheet(wb, "Summary")
-      writeDataTable(wb, sheet1, overall, firstColumn=TRUE, headerStyle=hs, bandedRows=TRUE) # write Completeness to table
+      mergeCells(wb, sheet1, cols = 1:6, rows = 1)
+      writeDataTable(wb, sheet1,title , firstColumn=TRUE,startRow=1, headerStyle=hs, bandedRows=TRUE) # write table title
+      writeDataTable(wb, sheet1, overall, firstColumn=TRUE,startRow=2, headerStyle=hs, bandedRows=TRUE) # write Completeness to table
       setColWidths(wb, sheet1, 1:ncol(overall), "auto") # format sheet
       freezePane(wb, sheet1, firstActiveRow=2) # format sheet
-      writeDataTable(wb,sheet1,Lag,startCol=1,startRow=nrow+3, headerStyle=hs, colNames=TRUE,rowNames=FALSE,firstColumn=TRUE) #write Timeliness to table
+      writeDataTable(wb,sheet1,Lag,startCol=1,firstColumn=TRUE,startRow=nrow+4, headerStyle=hs, colNames=TRUE,rowNames=FALSE,firstColumn=TRUE) #write Timeliness to table
       
       ##colorcode sheet
       negStyle <- createStyle(fontColour = "#000000", bgFill = "#FFC7CE")
@@ -211,21 +215,22 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       midStyle <- createStyle(fontColour = "#000000", fgFill = "#FFFF00")
       naStyle <- createStyle(bgFill = "#808080")
       
-      conditionalFormatting(wb, sheet1, cols=3, rows=2:(nrow+1), rule="$C2<90", style = negStyle)
-      conditionalFormatting(wb, sheet1, cols=3, rows=2:(nrow+1), rule="$C2>=90", style = posStyle) 
-      conditionalFormatting(wb, sheet1, cols=3, rows=2:(nrow+1), rule="ISBLANK($C2)=TRUE", style = naStyle)
-      conditionalFormatting(wb, sheet1, cols=4, rows=2:(nrow+1), rule="$D2<90", style = negStyle)
-      conditionalFormatting(wb, sheet1, cols=4, rows=2:(nrow+1), rule="$D2>=90", style = posStyle)
-      conditionalFormatting(wb, sheet1, cols=4, rows=2:(nrow+1), rule="ISBLANK($D2)=TRUE", style = naStyle)
-      addStyle(wb, sheet1, cols=3, rows=(nrow+4), style = posStyle1)
-      addStyle(wb, sheet1, cols=4, rows=(nrow+4), style = midStyle)
-      addStyle(wb, sheet1, cols=5, rows=(nrow+4), style = negStyle1)
+      conditionalFormatting(wb, sheet1, cols=3, rows=2:(nrow+2), rule="$C2<90", style = negStyle)
+      conditionalFormatting(wb, sheet1, cols=3, rows=2:(nrow+2), rule="$C2>=90", style = posStyle) 
+      conditionalFormatting(wb, sheet1, cols=3, rows=2:(nrow+2), rule="ISBLANK($C2)=TRUE", style = naStyle)
+      conditionalFormatting(wb, sheet1, cols=4, rows=2:(nrow+2), rule="$D2<90", style = negStyle)
+      conditionalFormatting(wb, sheet1, cols=4, rows=2:(nrow+2), rule="$D2>=90", style = posStyle)
+      conditionalFormatting(wb, sheet1, cols=4, rows=2:(nrow+2), rule="ISBLANK($D2)=TRUE", style = naStyle)
+      addStyle(wb, sheet1, cols=3, rows=(nrow+5), style = posStyle1)
+      addStyle(wb, sheet1, cols=4, rows=(nrow+5), style = midStyle)
+      addStyle(wb, sheet1, cols=5, rows=(nrow+5), style = negStyle1)
       ##Create Graph of change in delay over time
-      filename <- str_replace_all(name, "[^[a-zA-z\\s0-9]]", "") %>% # get rid of punctuation from faciltiy name
-        str_replace_all("[\\s]", "_") # replace spaces with underscores
-      ggsave(file=paste0( filename, "_WeeklyDelay.png"),lag_graph(data),dpi = 300,path = directory,width=8, height=6, unit ="in")
-      insertImage(wb, sheet1, paste0( directory, "/", filename, "_WeeklyDelay.png"), startRow = (nrow+6), startCol = 1, width = 8, height = 6)
       
+      ##insert plot of mean weekly delay plot if the time interval greater than 14 days
+      if (difftime(end1,start1,units = "day")>14){
+      ggsave(file=paste0( filename, "_WeeklyDelay.png"),lag_graph(data,start1,end1),dpi = 300,path = directory,width=8, height=6, unit ="in")
+      insertImage(wb, sheet1, paste0( directory, "/", filename, "_WeeklyDelay.png"), startRow = (nrow+6), startCol = 1, width = 8, height = 6)
+      }
       
       # write sheet
       saveWorkbook(wb, paste0(directory, "/", filename, "_Overall.xlsx"), overwrite=TRUE)
@@ -239,32 +244,6 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>&nbsp;</p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>        Greetings, this is a data quality summary for your hospital's submission from" , as.Date(start), " to", as.Date(end),"from the Kansas Syndromic Surveillance Program at the Kansas Department of Health and Environment.  We provide the attached report as a way letting you know about the completeness, validity and timeliness of your emergency department data submitted to our program.  There may be many reasons why the data sent to us failed the Centers for Disease Control and Prevention 90 percent standard. We would be happy to work with you if you have questions about the report or why your data may not meet standards. If the attached report does not have any red highlights for lower quality, then you don't need to take any further action.  We appreciate your attention to data quality.  For more information on the fields we received from your Electronic Health Records system, please visit this link:<a href='https://www.kdheks.gov/phi/download/Emergency_Department_Visit_Records_Data_Quality_Report.pdf'> Emergency Department Visit Records Data Quality Report</a>. We know you may have concerns about authenticity of this message. To verify this is authentic, you may contact me,",personname,", ",title,", ", sender, " to discuss any questions you may have. Please visit our Kansas Syndromic Surveillance Program (KSSP) <a href='https://www.kdheks.gov/phi/KSSP.htm'>web page</a><a href='https://www.kdheks.gov/phi/KSSP.htm'>&nbsp;</a></span><span style='color: rgb(50, 49, 48); font-family: Calibri, sans-serif; font-size: 14.6667px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;'>  to learn more about the program. The Kansas Syndromic Surveillance Program (KSSP) group can be contacted by email <a href='mailto:kdhe.syndromic@ks.gov'>kdhe.syndromic@ks.gov</a>.</span></p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'><strong><span style='margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 14pt; line-height: inherit; font-family: inherit; vertical-align: baseline; color: inherit;'>&nbsp;</span></strong></p>")
-        if (inline==T){
-          if (nwarning==0){
-            bodytext=paste(bodytext,"
-                   <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>All the fields are complete and valid, keep up the good work!</p>")
-          } else {
-            
-            for (j in 1:nwarning){
-              if(overall$Warning[warningcount[j]]=="Warning: Percent Complete Under 90"){
-                bodytext=paste(bodytext,"
-                       <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>", overall$Percent_Complete[warningcount[j]],"% of", overall$Field[warningcount[j]],"is complete. The HL7 code is",overall$HL7[warningcount[j]] ,"</p>")
-              }
-              if(overall$Warning[warningcount[j]]=="Warning: Percent Valid Under 90"){
-                bodytext=paste(bodytext,"
-                       <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>", overall$Percent_Valid[warningcount[j]],"% of", overall$Field[warningcount[j]],"is valid. The HL7 code is",overall$HL7[warningcount[j]] ,"</p>")
-              }
-              if(overall$Warning[warningcount[j]]=="Warning: Percent Complete and Percent Valid Under 90"){
-                bodytext=paste(bodytext,"
-                       <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>", overall$Percent_Complete[warningcount[j]],"% of", overall$Field[warningcount[j]],"is complete.", overall$Percent_Valid[warningcount[j]],"% of", overall$Field[warningcount[j]],"is valid. The HL7 code is",overall$HL7[warningcount[j]] ,"</p>")
-              }
-              if(overall$Warning[warningcount[j]]=="Warning: Percent Complete and Percent Valid Missing"){
-                bodytext=paste(bodytext,"
-                       <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>", overall$Field[warningcount[j]],"has missing % Complete and % Valid. The HL7 code is",overall$HL7[warningcount[j]] ,"</p>")
-              }
-            }
-          }
-        }
         
         bodytext=paste(bodytext,"<p>&nbsp;</p>
 <p style= 'color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>Kansas Syndromic Surveillance Program</p>

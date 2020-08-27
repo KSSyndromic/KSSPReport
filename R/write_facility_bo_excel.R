@@ -10,12 +10,12 @@
 #' library(emayili)
 #' library(ggplot2)
 #' library(readxl)
-#' write_facility_bo_excel("Input.xlsx")
+#' write_facility_excel("Input.xlsx")
 #' @import dplyr
 #' @import tidyr
 #' @import readxl
 #' @export
-write_facility_bo_excel <- function(input){
+write_facility_excel <- function(input){
   Input <- read_excel(input, col_names = FALSE)
   
   username <- as.character(Input[1,2])
