@@ -30,7 +30,7 @@
 #' key_set(service = "essence")
 #' ## store passwords for email
 #' key_set(service = "email")
-#'batch_job_all_hospital_admin(facility_spreadsheeet=""Facilities Spreadsheet.xlsx", username="bzhang02", password=key_get("essence"),
+#'batch_job_all_hospital_admin(facility_spreadsheet="Facilities Spreadsheet.xlsx", username="bzhang02", password=key_get("essence"),
 #'  table="KS_PR_Processed", mft="KS_MFT",  start="2020-05-01 00:00:00", 
 #'  end="2020-05-30 23:59:59", directory="~",
 #'  email =TRUE,sender="bo.zhang@@kdhe.ks.gov",
@@ -42,7 +42,7 @@
 #' @export
 batch_job_all_hospital_admin<-function(facility_spreadsheet,table, mft, username,password,start, end,directory,email=F, sender,email_password,personname=NA,title=NA, phone=NA){
   ready=yesno2("Make sure your facility spread sheet is up to date. Is your facility spread sheet up to date?")
-if (a==T){
+if (ready==T){
   contact=read_excel(facility_spreadsheet, sheet = "ED_POC_New")
   contact <- contact[rowSums(is.na(contact))<ncol(contact),]
   niter= nrow(contact)

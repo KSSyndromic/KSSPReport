@@ -45,7 +45,7 @@
 #' @export
 batch_job_all_hospital_tech_support<-function(facility_spreadsheet,table, mft, username,password,start, end,field=NA, exclude=NA, optional=T,directory,email=F, sender,email_password,personname=NA,title=NA, phone=NA){
   ready=yesno2("Make sure your facility spread sheet is up to date. Is your facility spread sheet up to date?")
-  if (a==T){
+  if (ready==T){
     contact=read_excel(facility_spreadsheet, sheet = "ED_POC_New")
     contact <- contact[rowSums(is.na(contact))<ncol(contact),]
     niter= nrow(contact)

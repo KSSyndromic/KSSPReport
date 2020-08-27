@@ -58,3 +58,19 @@ This function iteratively performs `write_facilty_report`  function for all Kans
 The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
 report and creates a table.
 }
+\examples{
+library(emayili)
+library(ggplot2)
+library(readxl)
+library(keyring)
+
+## store passwords for essence
+key_set(service = "essence")
+## store passwords for email
+key_set(service = "email")
+batch_job_all_hospital_admin(facility_spreadsheet="Facilities Spreadsheet.xlsx", username="bzhang02", password=key_get("essence"),
+ table="KS_PR_Processed", mft="KS_MFT",  start="2020-05-01 00:00:00", 
+ end="2020-05-30 23:59:59", directory="~",
+ email =TRUE,sender="bo.zhang@kdhe.ks.gov",
+email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
+}
