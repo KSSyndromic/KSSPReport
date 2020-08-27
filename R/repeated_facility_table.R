@@ -47,6 +47,7 @@ repeated_facility_table<-function(contact,table, mft, username,password,start, e
 niter= nrow(contact)
 success=NA
 for (i in 1:niter){
+  if(is.na(contact$receiver[i])==F & is.na(contact$facility[i])==F){
 success[i]=write_facility_report(username=username, password=password, 
                       table=table, mft=mft,
                       start=start, 
@@ -55,7 +56,12 @@ success[i]=write_facility_report(username=username, password=password,
                       directory=directory,field=field,exclude=exclude,
                       email =email, sender=sender,receiver=as.character(contact$receiver[i]),
                       email_password=email_password,personname=personname,title=title, phone=phone)
+  }else {
+  success[i]='Missing receiver email or facility id'
+}
 
   }
-  return(cbind(contact,success))
+report=cbind(contact,success)
+write.csv(report,paste0(directory, "/AdminReport",format(Sys.Date(),'%b_%d_%Y'),".csv"), row.names = TRUE)
+  return(report)
 }
