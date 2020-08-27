@@ -195,13 +195,13 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       colnames(Lag)[3:5]=c("% Visit Received in <24 Hr","% Visit Received in 24-48 Hr", "% Visit Received in >48 Hr")
       filename <- str_replace_all(name, "[^[a-zA-z\\s0-9]]", "") %>% # get rid of punctuation from faciltiy name
         str_replace_all("[\\s]", "_") # replace spaces with underscores
-      title=as.data.frame(paste("Syndromic Surveillance Quality Report for",as.character(gsub('_',' ',filename)), "from",format(as.Date(start1), "%b%d,%Y"), 'to', format(as.Date(end1), "%b%d,%Y")))
+      sheettitle=as.data.frame(paste("Syndromic Surveillance Quality Report for",as.character(gsub('_',' ',filename)), "from",format(as.Date(start1), "%b%d,%Y"), 'to', format(as.Date(end1), "%b%d,%Y")))
       ##create overall powerpoint
       wb <- createWorkbook()
       hs <- createStyle(fgFill="#4f81bd", halign="left", valign="top", textDecoration="bold", wrapText=TRUE)
       sheet1<- addWorksheet(wb, "Summary")
       mergeCells(wb, sheet1, cols = 1:6, rows = 1)
-      writeData(wb, sheet1,title , startRow=1, colNames = F) # write table title
+      writeData(wb, sheet1,sheettitle , startRow=1, colNames = F) # write table title
       writeDataTable(wb, sheet1, overall, firstColumn=TRUE,startRow=2, headerStyle=hs, bandedRows=TRUE, colNames=TRUE,rowNames=FALSE) # write Completeness to table
       setColWidths(wb, sheet1, 2:ncol(overall), "auto") # format sheet
       freezePane(wb, sheet1, firstActiveRow=3) # format sheet
