@@ -26,15 +26,15 @@
 #' library(emayili)
 #' library(ggplot2)
 #' library(readxl)
-#' batch_report_admin_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx")
+#' batch_all_production_admin_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx")
 #' ##you can override fields from the input.xlsx
-#' batch_report_admin_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx",email=F)
+#' batch_all_production_admin_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx",email=F)
 #' @import dplyr
 #' @import tidyr
 #' @import readxl
 #' @export
 #' 
-batch_report_admin_excel <- function(facility_spreadsheet,input, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
+batch_all_production_admin_excel <- function(facility_spreadsheet,input, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
     username <- as.character(Input[1,2])
@@ -75,7 +75,7 @@ batch_report_admin_excel <- function(facility_spreadsheet,input, contact,table=N
   if(is.na(phone)){
     phone<- as.character(Input[17,2])
   }
-  batch_report_admin(facility_spreadsheet=facility_spreadsheet,contact=contact, username=username, password=password, 
+  batch_all_production_admin(facility_spreadsheet=facility_spreadsheet,contact=contact, username=username, password=password, 
                           table=table, mft=mft,
                           start=start, 
                           end=end,field=field,
