@@ -34,7 +34,7 @@
 #' @import readxl
 #' @export
 #' 
-batch_all_production_admin_excel <- function(facility_spreadsheet, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
+batch_all_production_admin_excel <- function(facility_spreadsheet, input,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
     username <- as.character(Input[1,2])
