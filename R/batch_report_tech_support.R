@@ -21,12 +21,10 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
-#' @return Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. 
+#' @return First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.In addition, there will be a TechReport.csv file listing whether the email got sent. 
 #'
 #' @examples 
 #' library(emayili)
-#' library(ggplot2)
-#' library(readxl)
 #' library(keyring)
 #' 
 #' ## store passwords for essence
@@ -74,7 +72,7 @@ batch_all_production_tech_support<-function(facility_spreadsheet,table, mft, use
     report=report %>%
       select(c(`Facility Name`,C_Biosense_Facility_ID,`Facility IT Contacts`,`Facility IT Contacts Emails`,success))
     
-    write.csv(report,paste0(directory, "/AdminReport",format(Sys.Date(),'%b_%d_%Y'),".csv"), row.names = TRUE)
+    write.csv(report,paste0(directory, "/TechReport",format(Sys.Date(),'%b_%d_%Y'),".csv"), row.names = TRUE)
     return(report)
   }
   else{

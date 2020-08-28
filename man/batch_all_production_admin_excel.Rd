@@ -7,7 +7,6 @@
 batch_all_production_admin_excel(
   facility_spreadsheet,
   input,
-  contact,
   table = NA,
   mft = NA,
   username = NA,
@@ -55,7 +54,7 @@ batch_all_production_admin_excel(
 \item{phone}{Your phone number to be used in your email text}
 }
 \value{
-Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.
+First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. In addition, there will be a AdminReport.csv file listing whether the email got sent.
 }
 \description{
 This function uses excel generated information but can be override by additional inputs

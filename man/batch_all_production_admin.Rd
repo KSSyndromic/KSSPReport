@@ -51,7 +51,7 @@ batch_all_production_admin(
 \item{phone}{Your phone number to be used in your email text}
 }
 \value{
-Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.
+First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. In addition, there will be a AdminReport.csv file listing whether the email got sent.
 }
 \description{
 This function iteratively performs `write_facilty_report`  function for all Kansas Facilities in production targeted toward admins. It will generate summary report for all specified facility.
