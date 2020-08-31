@@ -23,6 +23,7 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
+#' @param message The email message to be sent. Allows for composition of costume messages.
 #' @return A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent. 
 #' @examples 
 #' library(emayili)
@@ -232,22 +233,29 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
         #compose email message
         warningcount=which(!is.na(overall$Warning))
         nwarning= length(warningcount)
-        subject= paste(gsub('_',' ',filename),"Syndromic Surveillance Quality Report from KDHE")
+        facilityname=paste(gsub('_',' ',filename))
+        subject= paste(facilityname,"Syndromic Surveillance Quality Report from KDHE")
         if (is.na(message)){
         bodytext= paste("<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>All,</p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>&nbsp;</p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>        Greetings, this is a data quality summary for your hospital's submission from" , as.Date(start), " to", as.Date(end),"from the Kansas Syndromic Surveillance Program at the Kansas Department of Health and Environment.  We provide the attached report as a way letting you know about the completeness, validity and timeliness of your emergency department data submitted to our program.  There may be many reasons why the data sent to us failed the Centers for Disease Control and Prevention 90 percent standard. We would be happy to work with you if you have questions about the report or why your data may not meet standards. If the attached report does not have any red highlights for lower quality, then you don't need to take any further action.  We appreciate your attention to data quality.  For more information on the fields we received from your Electronic Health Records system, please visit this link:<a href='https://www.kdheks.gov/phi/download/Emergency_Department_Visit_Records_Data_Quality_Report.pdf'> Emergency Department Visit Records Data Quality Report</a>. We know you may have concerns about authenticity of this message. To verify this is authentic, you may contact me,",personname,", ",title,", ", sender, " to discuss any questions you may have. Please visit our Kansas Syndromic Surveillance Program (KSSP) <a href='https://www.kdheks.gov/phi/KSSP.htm'>web page</a><a href='https://www.kdheks.gov/phi/KSSP.htm'>&nbsp;</a></span><span style='color: rgb(50, 49, 48); font-family: Calibri, sans-serif; font-size: 14.6667px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;'>  to learn more about the program. The Kansas Syndromic Surveillance Program (KSSP) group can be contacted by email <a href='mailto:kdhe.syndromic@ks.gov'>kdhe.syndromic@ks.gov</a>.</span></p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'><strong><span style='margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 14pt; line-height: inherit; font-family: inherit; vertical-align: baseline; color: inherit;'>&nbsp;</span></strong></p>")
         }else{
-          message=unlist(strsplit(as.character(message), '\n'))
-          bodytext=""
+              bodytext=""
           for (j in 1:length(message)){
             if (message[j]==""){
               bodytext=paste(bodytext,"<p>&nbsp; </p>") 
             }else{
+              message[j]=gsub("*personname*",personname,message[j])
+              message[j]=gsub("*facilityname*",facilityname,message[j])
+              message[j]=gsub("*phone*",phone,message[j])
+              message[j]=gsub("*start*",as.Date(start),message[j])
+              message[j]=gsub("*end*",as.Date(end),message[j])
+              message[j]=gsub("*sender*",sender,message[j])
               bodytext=paste(bodytext,"<p>",message[j],"</p>")
             }
           }
+              
         }
         
         bodytext=paste(bodytext,"<p>&nbsp;</p>

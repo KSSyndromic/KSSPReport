@@ -23,6 +23,7 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
+#'  @param message The email message to be sent. Allows for composition of costume messages.
 #' @return Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. 
 #' 
 #' @examples 
@@ -37,7 +38,7 @@
 #' @import readxl
 #' @export
 #' 
-repeated_facility_excel <- function(input, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,field=NA,exclude=NA,optional=T,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
+repeated_facility_excel <- function(input, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,field=NA,exclude=NA,optional=T,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA,message=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
   username <- as.character(Input[1,2])
@@ -84,11 +85,14 @@ repeated_facility_excel <- function(input, contact,table=NA, mft=NA, username=NA
   if(is.na(phone)){
   phone<- as.character(Input[17,2])
   }
+  if(is.na(message)){
+    message<- ifelse(is.na(Input[18,2]),NA, as.character(Input[18,2]))
+  }
   repeated_facility_table(contact=contact, username=username, password=password, 
                         table=table, mft=mft,
                         start=start, 
                         end=end,
                         directory=directory,exclude=exclude,field=field,optional = optional,
                         email =email, sender=sender,
-                        email_password=email_password,personname=personname,title=title, phone=phone)
+                        email_password=email_password,personname=personname,title=title, phone=phone,message=message)
 }

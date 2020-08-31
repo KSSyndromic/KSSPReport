@@ -21,6 +21,7 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
+#'  @param message The email message to be sent. Allows for composition of costume messages.
 #' @return First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.In addition, there will be a TechReport.csv file listing whether the email got sent. 
 #'
 #' @examples 
@@ -41,7 +42,7 @@
 #' @import tidyr
 #' @import readxl
 #' @export
-batch_all_production_tech_support<-function(facility_spreadsheet,table, mft, username,password,start, end,field=NA, exclude=NA, optional=T,directory,email=F, sender,email_password,personname=NA,title=NA, phone=NA){
+batch_all_production_tech_support<-function(facility_spreadsheet,table, mft, username,password,start, end,field=NA, exclude=NA, optional=T,directory,email=F, sender,email_password,personname=NA,title=NA, phone=NA,message=NA){
   ready=yesno2("Make sure your facility spread sheet is up to date. Is your facility spread sheet up to date?")
   if (ready==T){
     contact=read_excel(facility_spreadsheet, sheet = "ED_POC_New")
@@ -59,7 +60,7 @@ batch_all_production_tech_support<-function(facility_spreadsheet,table, mft, use
                                            facility=contact$C_Biosense_Facility_ID[i],
                                            directory=directory,
                                            email =email, sender=sender,field=field,exclude=exclude,optional=optional,receiver=as.character(contact$`Facility IT Contacts Emails`[i]),
-                                           email_password=email_password,personname=personname,title=title, phone=phone)
+                                           email_password=email_password,personname=personname,title=title, phone=phone,message=message)
           
         }else {
           success[i]='No admin email provided'

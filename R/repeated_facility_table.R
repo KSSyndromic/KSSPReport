@@ -21,6 +21,7 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
+#' @param message The email message to be sent. Allows for composition of costume messages.
 #' @return Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. 
 #' 
 #' @examples 
@@ -43,7 +44,7 @@
 #'  email =TRUE,sender="bo.zhang@@kdhe.ks.gov",
 #' email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
 #' @export
-repeated_facility_table<-function(contact,table, mft, username,password,start, end,directory,field=NA,exclude=NA,optional=T,email=F, sender,email_password,personname=NA,title=NA, phone=NA){
+repeated_facility_table<-function(contact,table, mft, username,password,start, end,directory,field=NA,exclude=NA,optional=T,email=F, sender,email_password,personname=NA,title=NA, phone=NA,message=NA){
 niter= nrow(contact)
 success=NA
 for (i in 1:niter){
@@ -55,7 +56,7 @@ success[i]=write_facility_report(username=username, password=password,
                       facility=contact$facility[i],
                       directory=directory,field=field,exclude=exclude,
                       email =email, sender=sender,receiver=as.character(contact$receiver[i]),
-                      email_password=email_password,personname=personname,title=title, phone=phone)
+                      email_password=email_password,personname=personname,title=title, phone=phone,message=message)
   }else {
   success[i]='Missing receiver email or facility id'
 }

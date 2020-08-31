@@ -20,6 +20,7 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
+#'@param message The email message to be sent. Allows for composition of costume messages.
 #' @return First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. In addition, there will be a AdminReport.csv file listing whether the email got sent.
 #' 
 #' @examples 
@@ -34,7 +35,7 @@
 #' @import readxl
 #' @export
 #' 
-batch_all_production_admin_excel <- function(facility_spreadsheet, input,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
+batch_all_production_admin_excel <- function(facility_spreadsheet, input,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA,message=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
     username <- as.character(Input[1,2])
@@ -75,11 +76,14 @@ batch_all_production_admin_excel <- function(facility_spreadsheet, input,table=N
   if(is.na(phone)){
     phone<- as.character(Input[17,2])
   }
+  if(is.na(message)){
+    message<- ifelse(is.na(Input[18,2]),NA, as.character(Input[18,2]))
+  }
   batch_all_production_admin(facility_spreadsheet=facility_spreadsheet, username=username, password=password, 
                           table=table, mft=mft,
                           start=start, 
                           end=end,
                           directory=directory,
                           email =email, sender=sender,
-                          email_password=email_password,personname=personname,title=title, phone=phone)
+                          email_password=email_password,personname=personname,title=title, phone=phone,message=message)
 }

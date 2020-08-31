@@ -25,6 +25,7 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
+#'  @param message The email message to be sent. Allows for composition of costume messages.
 #' @examples 
 #' library(emayili)
 #' library(ggplot2)
@@ -34,7 +35,7 @@
 #' @import tidyr
 #' @import readxl
 #' @export
-write_facility_excel <- function(input,facility=NA, receiver=NA ,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,field=NA,exclude=NA,optional=T,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA){
+write_facility_excel <- function(input,facility=NA, receiver=NA ,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,field=NA,exclude=NA,optional=T,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA,message=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
     username <- as.character(Input[1,2])
@@ -87,7 +88,9 @@ facility <- as.character(Input[7,2])
 if(is.na(receiver)){
   receiver <-as.character(Input[14,2])
 }
-
+  if(is.na(message)){
+    message<- ifelse(is.na(Input[18,2]),NA, as.character(Input[18,2]))
+  }
     
   write_facility_report(username=username, password=password, 
                         table=table, mft=mft,
@@ -96,5 +99,5 @@ if(is.na(receiver)){
                         facility=facility,
                         directory=directory,field=field,exclude=exclude,optional=optional,
                         email =email, sender=sender,receiver=receiver,
-                        email_password=email_password,personname=personname,title=title, phone=phone)
+                        email_password=email_password,personname=personname,title=title, phone=phone,message=message)
 }

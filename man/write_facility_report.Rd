@@ -22,7 +22,8 @@ write_facility_report(
   email_password = NA,
   personname = NA,
   title = NA,
-  phone = NA
+  phone = NA,
+  message = NA
 )
 }
 \arguments{
@@ -61,6 +62,8 @@ write_facility_report(
 \item{title}{Your job title to be used in your email text}
 
 \item{phone}{Your phone number to be used in your email text}
+
+\item{message}{The email message to be sent. Allows for composition of costume messages.}
 }
 \value{
 A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent.

@@ -22,7 +22,8 @@ repeated_facility_excel(
   email_password = NA,
   personname = NA,
   title = NA,
-  phone = NA
+  phone = NA,
+  message = NA
 )
 }
 \arguments{
@@ -60,7 +61,8 @@ repeated_facility_excel(
 
 \item{title}{Your job title to be used in your email text}
 
-\item{phone}{Your phone number to be used in your email text}
+\item{phone}{Your phone number to be used in your email text
+@param message The email message to be sent. Allows for composition of costume messages.}
 }
 \value{
 Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.

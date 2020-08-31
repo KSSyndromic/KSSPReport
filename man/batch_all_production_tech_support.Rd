@@ -21,7 +21,8 @@ batch_all_production_tech_support(
   email_password,
   personname = NA,
   title = NA,
-  phone = NA
+  phone = NA,
+  message = NA
 )
 }
 \arguments{
@@ -57,7 +58,8 @@ batch_all_production_tech_support(
 
 \item{title}{Your job title to be used in your email text}
 
-\item{phone}{Your phone number to be used in your email text}
+\item{phone}{Your phone number to be used in your email text
+@param message The email message to be sent. Allows for composition of costume messages.}
 }
 \value{
 First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.In addition, there will be a TechReport.csv file listing whether the email got sent.
