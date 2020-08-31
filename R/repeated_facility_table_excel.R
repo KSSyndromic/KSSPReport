@@ -27,9 +27,7 @@
 #' @return Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. 
 #' 
 #' @examples 
-#' library(emayili)
-#' library(ggplot2)
-#' library(readxl)
+#' write_facility_excel("Input.xlsx")
 #' repeated_facility_excel("Input.xlsx", contact = contact)
 #' ##you can override fields from the input.xlsx
 #' repeated_facility_excel("Input.xlsx", contact = contact,field='age',email=F)

@@ -61,16 +61,14 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table.
 }
 \examples{
-library(emayili)
-library(ggplot2)
-library(readxl)
+library(biosensequality)
 library(keyring)
 
 ## store passwords for essence
 key_set(service = "essence")
 ## store passwords for email
 key_set(service = "email")
-batch_all_production_admin(facility_spreadsheet="Facilities Spreadsheet.xlsx", username="bzhang02", password=key_get("essence"),
+batch_all_production_admin(facility_spreadsheet="Facilities Spreadsheet_New.xlsx", username="bzhang02", password=key_get("essence"),
  table="KS_PR_Processed", mft="KS_MFT",  start="2020-05-01 00:00:00", 
  end="2020-05-30 23:59:59", directory="~",
  email =TRUE,sender="bo.zhang@kdhe.ks.gov",

@@ -74,9 +74,7 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table. The program can send out a report to designated email address
 }
 \examples{
-library(emayili)
-library(ggplot2)
-library(readxl)
+write_facility_excel("Input.xlsx")
 repeated_facility_excel("Input.xlsx", contact = contact)
 ##you can override fields from the input.xlsx
 repeated_facility_excel("Input.xlsx", contact = contact,field='age',email=F)

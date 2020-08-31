@@ -25,9 +25,7 @@
 #' @return Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. 
 #' 
 #' @examples 
-#' library(emayili)
-#' library(ggplot2)
-#' library(readxl)
+#' write_facility_excel("Input.xlsx")
 #' library(keyring)
 #' 
 #' ## store passwords for essence

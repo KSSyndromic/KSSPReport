@@ -75,10 +75,8 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table.
 }
 \examples{
-library(emayili)
-library(ggplot2)
-library(readxl)
-batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx")
+library(biosensequality)
+batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx")
 ##you can override fields from the input.xlsx
-batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet.xlsx",input="Input.xlsx",email=F)
+batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx",email=F)
 }

@@ -27,10 +27,10 @@
 #' @param phone Your phone number to be used in your email text
 #'  @param message The email message to be sent. Allows for composition of costume messages.
 #' @examples 
-#' library(emayili)
-#' library(ggplot2)
-#' library(readxl)
+#' library(biosensequality)
 #' write_facility_excel("Input.xlsx")
+#' ## You can override options from input by filling in the parameters you need to override
+#' write_facility_excel("Input.xlsx", email=F)
 #' @import dplyr
 #' @import tidyr
 #' @import readxl

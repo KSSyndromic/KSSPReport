@@ -26,10 +26,8 @@
 #' @param message The email message to be sent. Allows for composition of costume messages.
 #' @return A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent. 
 #' @examples 
-#' library(emayili)
-#' library(ggplot2)
+#' library(biosensequality)
 #' library(keyring)
-#' library(readxl)
 #' ## store passwords for essence
 #' key_set(service = "essence")
 #' ## store passwords for email
@@ -65,7 +63,19 @@
 #'                    directory="~",
 #'                    email =TRUE,sender='bo.zhang@@kdhe.ks.gov',receiver="bo.zhang@@kdhe.ks.gov;Greg.Crawford@@ks.gov",
 #'                    email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
-#' 
+#' #' ## if you want to use costume message when sending out an email                  
+#' write_facility_report(username="bzhang02", password=key_get("essence"), 
+#'                    table="KS_PR_Processed", mft="KS_MFT",
+#'                    start="2020-06-1 00:00:00", 
+#'                    end="2020-07-31 23:59:59",
+#'                    facility=3890,
+#'                    directory="~",
+#'                    email =TRUE,sender='bo.zhang@@kdhe.ks.gov',receiver="bo.zhang@@kdhe.ks.gov;Greg.Crawford@@ks.gov",
+#'                    email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915',
+#'                    message="
+#'                    Hi All
+#'                    This is a testing message from *start* to *end* at the *facilityname*, please contact me, *personname*  at *phone*,*sender*. Visit the following website for more info <a href="https://www.kdheks.gov/">website</a>
+#'                    Bo Zhang")
 #'
 #' @import dplyr
 #' @import tidyr
@@ -247,13 +257,13 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
             if (message[j]==""){
               bodytext=paste(bodytext,"<p>&nbsp; </p>") 
             }else{
-              message[j]=gsub("/*personname/*",personname,message[j])
-              message[j]=gsub("/*facilityname/*",facilityname,message[j])
-              message[j]=gsub("/*phone/*",phone,message[j])
-              message[j]=gsub("/*start/*",as.Date(start),message[j])
-              message[j]=gsub("/*end/*",as.Date(end),message[j])
-              message[j]=gsub("/*sender/*",sender,message[j])
-              message[j]=gsub("[*]","" ,message[j])
+              message[j]=gsub("[*]personname[*]",personname,message[j])
+              message[j]=gsub("[*]facilityname[*]",facilityname,message[j])
+              message[j]=gsub("[*]phone[*]",phone,message[j])
+              message[j]=gsub("[*]start[*]",as.Date(start),message[j])
+              message[j]=gsub("[*]end[*]",as.Date(end),message[j])
+              message[j]=gsub("[*]sender[*]",sender,message[j])
+              message[j]=gsub("[*]title[*]",title,message[j])
               bodytext=paste(bodytext,"<p>",message[j],"</p>")
             }
           }

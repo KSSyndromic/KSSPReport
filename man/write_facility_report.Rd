@@ -74,10 +74,8 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table. The program can send out a report to designated email address
 }
 \examples{
-library(emayili)
-library(ggplot2)
+library(biosensequality)
 library(keyring)
-library(readxl)
 ## store passwords for essence
 key_set(service = "essence")
 ## store passwords for email
@@ -113,6 +111,18 @@ write_facility_report(username="bzhang02", password=key_get("essence"),
                    directory="~",
                    email =TRUE,sender='bo.zhang@kdhe.ks.gov',receiver="bo.zhang@kdhe.ks.gov;Greg.Crawford@ks.gov",
                    email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
-
+#' ## if you want to use costume message when sending out an email                  
+write_facility_report(username="bzhang02", password=key_get("essence"), 
+                   table="KS_PR_Processed", mft="KS_MFT",
+                   start="2020-06-1 00:00:00", 
+                   end="2020-07-31 23:59:59",
+                   facility=3890,
+                   directory="~",
+                   email =TRUE,sender='bo.zhang@kdhe.ks.gov',receiver="bo.zhang@kdhe.ks.gov;Greg.Crawford@ks.gov",
+                   email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915',
+                   message="
+                   Hi All
+                   This is a testing message from *start* to *end* at the *facilityname*, please contact me, *personname*  at *phone*,*sender*. Visit the following website for more info <a href="https://www.kdheks.gov/">website</a>
+                   Bo Zhang")
 
 }

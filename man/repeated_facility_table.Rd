@@ -71,9 +71,7 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table. The program can send out a report to designated email address
 }
 \examples{
-library(emayili)
-library(ggplot2)
-library(readxl)
+write_facility_excel("Input.xlsx")
 library(keyring)
 
 ## store passwords for essence
