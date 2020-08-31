@@ -242,7 +242,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
           message=unlist(strsplit(as.character(message), '\n'))
           bodytext=NA
           for (j in 1:length(message)){
-            if (message[j]="",{
+            if (message[j]=="",{
               bodytext=paste(bodytext,"<p>&nbsp; </p>") 
             }else{
               bodytext=paste(bodytext,"<p>",message[j],"</p>")
