@@ -233,7 +233,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
         #compose email message
         warningcount=which(!is.na(overall$Warning))
         nwarning= length(warningcount)
-        facilityname=paste(gsub('_',' ',filename))
+        facilityname=paste(gsub('_',' ',filename)
         subject= paste(facilityname,"Syndromic Surveillance Quality Report from KDHE")
         if (is.na(message)){
         bodytext= paste("<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>All,</p>
@@ -242,16 +242,18 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'><strong><span style='margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 14pt; line-height: inherit; font-family: inherit; vertical-align: baseline; color: inherit;'>&nbsp;</span></strong></p>")
         }else{
               bodytext=""
+              message=unlist(strsplit(message, '\n'))
           for (j in 1:length(message)){
             if (message[j]==""){
               bodytext=paste(bodytext,"<p>&nbsp; </p>") 
             }else{
-              message[j]=gsub("*personname*",personname,message[j])
-              message[j]=gsub("*facilityname*",facilityname,message[j])
-              message[j]=gsub("*phone*",phone,message[j])
-              message[j]=gsub("*start*",as.Date(start),message[j])
-              message[j]=gsub("*end*",as.Date(end),message[j])
-              message[j]=gsub("*sender*",sender,message[j])
+              message[j]=gsub("/*personname/*",personname,message[j])
+              message[j]=gsub("/*facilityname/*",facilityname,message[j])
+              message[j]=gsub("/*phone/*",phone,message[j])
+              message[j]=gsub("/*start/*",as.Date(start),message[j])
+              message[j]=gsub("/*end/*",as.Date(end),message[j])
+              message[j]=gsub("/*sender/*",sender,message[j])
+              message[j]=gsub("/*","" ,message[j])
               bodytext=paste(bodytext,"<p>",message[j],"</p>")
             }
           }
