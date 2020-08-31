@@ -240,7 +240,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'><strong><span style='margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 14pt; line-height: inherit; font-family: inherit; vertical-align: baseline; color: inherit;'>&nbsp;</span></strong></p>")
         }else{
           message=unlist(strsplit(as.character(message), '\n'))
-          bodytext=NA
+          bodytext=""
           for (j in 1:length(message)){
             if (message[j]==""){
               bodytext=paste(bodytext,"<p>&nbsp; </p>") 
