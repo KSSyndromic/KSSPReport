@@ -51,7 +51,7 @@
 #'                    table="KS_PR_Processed", mft="KS_MFT",
 #'                    start="2020-06-1 00:00:00", 
 #'                    end="2020-07-31 23:59:59",
-#'                    exclude=field
+#'                    exclude="sex;age"
 #'                    facility=3890,
 #'                    directory="~") 
 #' ## if you want to send out an email                  
@@ -112,8 +112,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
         name=name[1]
       }
       
-      field=unlist(strsplit(as.character(field), ';|,'))
-      exclude=unlist(strsplit(as.character(exclude), ';|,'))
+   
       # get hl7 values
       data("hl7_values", envir=environment())
       hl7_values$Field <- as.character(hl7_values$Field)
@@ -172,12 +171,14 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       }
       #select the field needed
       if (is.na(field)==F){
+        field=unlist(strsplit(as.character(field), ';|,'))
         field1=paste(field,collapse="|")
         overall<-overall%>%
           filter(grepl(field1,overall$Field, ignore.case = T))
       }
       #exclude the select field
       if (is.na(exclude)==F){
+        exclude=unlist(strsplit(as.character(exclude), ';|,'))
         exclude1=paste(exclude,collapse="|")
         overall<-overall%>%
           filter(!grepl(exclude1,overall$Field, ignore.case = T))
