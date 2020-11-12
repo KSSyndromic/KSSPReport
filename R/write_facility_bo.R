@@ -311,7 +311,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
 
 
 
-write_facility_report_it <- function(username, password, table, mft, start, end, facility, directory="",field=NA, exclude=NA, optional=TRUE, email=FALSE, sender=NA,receiver=NA,email_password=NA, personname=NA,title=NA, phone=NA,message=NA) {
+write_facility_it <- function(username, password, table, mft, start, end, facility, directory="",field=NA, exclude=NA, optional=TRUE, email=FALSE, sender=NA,receiver=NA,email_password=NA, personname=NA,title=NA, phone=NA,message=NA) {
       start1=as.POSIXct(start)
     end1=as.POSIXct(end)
   if (start1>end1){
