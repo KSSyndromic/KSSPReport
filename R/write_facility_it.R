@@ -1,0 +1,426 @@
+write_facility_it <- function (username, password, table, mft, start, end, facility,
+                               
+                               directory = "", field = NA, exclude = NA, optional = TRUE,
+                               
+                               email = FALSE, sender = NA, receiver = NA, email_password = NA,
+                               
+                               personname = NA, title = NA, phone = NA, message = NA)
+  
+{
+  
+  start1 = as.POSIXct(start)
+  
+  end1 = as.POSIXct(end)
+  
+  if (start1 > end1) {
+    
+    stop("Error: Start time after end time")
+    
+  }
+  
+  else {
+    
+    channel <- odbcConnect("BioSense_Platform", paste0("BIOSENSE\\",
+                                                       
+                                                       username), password)
+    
+    data <- sqlQuery(channel, paste0("SELECT * FROM ", table,
+                                     
+                                     " WHERE C_Visit_Date_Time >= '", start1, "' AND C_Visit_Date_Time <= '",
+                                     
+                                     end1, "' AND C_Biosense_Facility_ID = ", facility),
+                     
+                     as.is = TRUE)
+    
+    if (nrow(data) == 0) {
+      
+      emailed = "query yielded no data"
+      
+      odbcCloseAll()
+      
+      print("The query yielded no data.")
+      
+    }
+    
+    else {
+      
+      name <- as.character(unlist(unname(c(sqlQuery(channel,
+                                                    
+                                                    paste0("SELECT Facility_Name FROM ", mft, " WHERE C_Biosense_Facility_ID = ",
+                                                           
+                                                           facility))))))
+      
+      odbcCloseAll()
+      
+      if (length(name) > 1) {
+        
+        name = name[1]
+        
+      }
+      
+      data("hl7_values", envir = environment())
+      
+      hl7_values$Field <- as.character(hl7_values$Field)
+      
+      req_nulls <- get_req_nulls_BZ(data) %>% select(-c(C_Biosense_Facility_ID)) %>%
+        
+        gather(Field, Value, 2:ncol(.)) %>% spread(Measure,
+                                                   
+                                                   Value) %>% right_join(hl7_values, ., by = "Field")
+      
+      opt_nulls <- get_opt_nulls_BZ(data) %>% select(-c(C_Biosense_Facility_ID)) %>%
+        
+        gather(Field, Value, 2:ncol(.)) %>% spread(Measure,
+                                                   
+                                                   Value) %>% right_join(hl7_values, ., by = "Field")
+      
+      invalids <- get_all_invalids_BZ(data) %>% select(-c(C_Biosense_Facility_ID)) %>%
+        
+        gather(Field, Value, 2:ncol(.)) %>% spread(Measure,
+                                                   
+                                                   Value) %>% right_join(hl7_values, ., by = "Field")
+      
+      overall_complete <- full_join(req_nulls, opt_nulls) %>%
+        
+        mutate(Percent_Complete = 100 - Percent) %>%
+        
+        select(-c(Count, Percent))
+      
+      overall <- full_join(overall_complete, invalids) %>%
+        
+        mutate(Percent_Valid = 100 - Percent) %>% select(-c(Count,
+                                                            
+                                                            Percent))
+      
+      nrow1 = length(overall$Field)
+      
+      for (i in 1:nrow1) {
+        
+        if (is.na(overall$Percent_Valid[i]) & is.na(overall$Percent_Complete[i])) {
+          
+          overall$Warning[i] = "Warning: Percent Complete and Percent Valid Missing"
+          
+        }
+        
+        else if (is.na(overall$Percent_Complete[i]) &
+                 
+                 overall$Percent_Valid[i] < 90) {
+          
+          overall$Warning[i] = "Warning: Percent Valid Under 90"
+          
+        }
+        
+        else if (is.na(overall$Percent_Valid[i]) & overall$Percent_Complete[i] <
+                 
+                 90) {
+          
+          overall$Warning[i] = "Warning: Percent Complete Under 90"
+          
+        }
+        
+        else if (overall$Percent_Valid[i] < 90 & overall$Percent_Complete[i] <
+                 
+                 90) {
+          
+          overall$Warning[i] = "Warning: Percent Complete and Percent Valid Under 90"
+          
+        }
+        
+        else {
+          
+          overall$Warning[i] = NA
+          
+        }
+        
+      }
+      
+      overall$Optional = ifelse(overall$Field %in% opt_nulls$Field,
+                                
+                                "Optional", "Required")
+      
+      if (optional == F) {
+        
+        overall <- overall %>% filter(overall$Optional ==
+                                        
+                                        "Required")
+        
+      }
+      
+      if (is.na(field) == F) {
+        
+        field = unlist(strsplit(as.character(field),
+                                
+                                ";|,"))
+        
+        field1 = paste(field, collapse = "|")
+        
+        overall <- overall %>% filter(grepl(field1, overall$Field,
+                                            
+                                            ignore.case = T))
+        
+      }
+      
+      if (is.na(exclude) == F) {
+        
+        exclude = unlist(strsplit(as.character(exclude),
+                                  
+                                  ";|,"))
+        
+        exclude1 = paste(exclude, collapse = "|")
+        
+        overall <- overall %>% filter(!grepl(exclude1,
+                                             
+                                             overall$Field, ignore.case = T))
+        
+      }
+      
+      nrow = length(overall$Field)
+      
+      vmin <- min(as.character(data$C_Visit_Date_Time))
+      
+      vmax <- max(as.character(data$C_Visit_Date_Time))
+      
+      amin <- min(as.character(data$Arrived_Date_Time))
+      
+      amax <- max(as.character(data$Arrived_Date_Time))
+      
+      Lag_Summary = lag_breakdown(data)
+      
+      Lag <- data.frame(Lag_Name = c("Arrival_Visit"),
+                        
+                        Lag_Between = c("Arrival_Date_Time-Visit_Date_Time"),
+                        
+                        Group1 = t(Lag_Summary[1, 3]), Group2 = t(Lag_Summary[2,
+                                                                              
+                                                                              3]), Group3 = t(Lag_Summary[3, 3]))
+      
+      colnames(Lag)[3:5] = c("% Visit Received in <24 Hr",
+                             
+                             "% Visit Received in 24-48 Hr", "% Visit Received in >48 Hr")
+      
+      filename <- str_replace_all(name, "[^[a-zA-z\\s0-9]]",
+                                  
+                                  "") %>% str_replace_all("[\\s]", "_")
+      
+      sheettitle = as.data.frame(paste("Syndromic Surveillance Quality Report for",
+                                       
+                                       as.character(gsub("_", " ", filename)), "from",
+                                       
+                                       format(as.Date(start1), "%b%d,%Y"), "to", format(as.Date(end1),
+                                                                                        
+                                                                                        "%b%d,%Y")))
+      
+      wb <- createWorkbook()
+      
+      hs <- createStyle(fgFill = "#4f81bd", halign = "left",
+                        
+                        valign = "top", textDecoration = "bold", wrapText = TRUE)
+      
+      sheet1 <- addWorksheet(wb, "Summary")
+      
+      mergeCells(wb, sheet1, cols = 1:6, rows = 1)
+      
+      writeData(wb, sheet1, sheettitle, startRow = 1, colNames = F)
+      
+      writeDataTable(wb, sheet1, overall, firstColumn = TRUE,
+                     
+                     startRow = 2, headerStyle = hs, bandedRows = TRUE,
+                     
+                     colNames = TRUE, rowNames = FALSE)
+      
+      setColWidths(wb, sheet1, 2:ncol(overall), "auto")
+      
+      freezePane(wb, sheet1, firstActiveRow = 3)
+      
+      writeDataTable(wb, sheet1, Lag, startCol = 1, startRow = nrow +
+                       
+                       4, headerStyle = hs, colNames = TRUE, rowNames = FALSE)
+      
+      negStyle <- createStyle(fontColour = "#000000", bgFill = "#FFC7CE")
+      
+      posStyle <- createStyle(fontColour = "#000000", bgFill = "#C6EFCE")
+      
+      negStyle1 <- createStyle(fontColour = "#000000",
+                               
+                               fgFill = "#FFC7CE")
+      
+      posStyle1 <- createStyle(fontColour = "#000000",
+                               
+                               fgFill = "#C6EFCE")
+      
+      midStyle <- createStyle(fontColour = "#000000", fgFill = "#FFFF00")
+      
+      naStyle <- createStyle(bgFill = "#808080")
+      
+      conditionalFormatting(wb, sheet1, cols = 3, rows = 2:(nrow +
+                                                              
+                                                              2), rule = "$C2<90", style = negStyle)
+      
+      conditionalFormatting(wb, sheet1, cols = 3, rows = 2:(nrow +
+                                                              
+                                                              2), rule = "$C2>=90", style = posStyle)
+      
+      conditionalFormatting(wb, sheet1, cols = 3, rows = 2:(nrow +
+                                                              
+                                                              2), rule = "ISBLANK($C2)=TRUE", style = naStyle)
+      
+      conditionalFormatting(wb, sheet1, cols = 4, rows = 2:(nrow +
+                                                              
+                                                              2), rule = "$D2<90", style = negStyle)
+      
+      conditionalFormatting(wb, sheet1, cols = 4, rows = 2:(nrow +
+                                                              
+                                                              2), rule = "$D2>=90", style = posStyle)
+      
+      conditionalFormatting(wb, sheet1, cols = 4, rows = 2:(nrow +
+                                                              
+                                                              2), rule = "ISBLANK($D2)=TRUE", style = naStyle)
+      
+      addStyle(wb, sheet1, cols = 3, rows = (nrow + 5),
+               
+               style = posStyle1)
+      
+      addStyle(wb, sheet1, cols = 4, rows = (nrow + 5),
+               
+               style = midStyle)
+      
+      addStyle(wb, sheet1, cols = 5, rows = (nrow + 5),
+               
+               style = negStyle1)
+      
+      if (difftime(end1, start1, units = "day") > 14) {
+        
+        ggsave(file = paste0(filename, "_WeeklyDelay.png"),
+               
+               lag_graph(data, start1, end1), dpi = 300, path = directory,
+               
+               width = 8, height = 6, unit = "in")
+        
+        insertImage(wb, sheet1, paste0(directory, "/",
+                                       
+                                       filename, "_WeeklyDelay.png"), startRow = (nrow +
+                                                                                    
+                                                                                    8), startCol = 1, width = 8, height = 6)
+        
+      }
+      
+      saveWorkbook(wb, paste0(directory, "/", filename,
+                              
+                              "_Overall.xlsx"), overwrite = TRUE)
+      
+      if (email == F) {
+        
+        emailed = "Reporter generated Email not supplied"
+        
+      }
+      
+      else if (email == T) {
+        
+        warningcount = which(!is.na(overall$Warning))
+        
+        nwarning = length(warningcount)
+        
+        facilityname = paste(gsub("_", " ", filename))
+        
+        subject = paste(facilityname, "Syndromic Surveillance Quality Report from KDHE")
+        
+        if (is.na(message)) {
+          
+          bodytext = paste("<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>Dear Hospital CEO / Administrator,</p>\n<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>&nbsp;</p>\n<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>       Attached is a bi-annual data quality report based on information provided by your Emergency Department (ED) to the Kansas Syndromic Surveillance Program (KSSP), between",
+                           
+                           as.Date(start), " and", as.Date(end), ". The syndromic surveillance program is a CDC provided program allowing state health departments, local health departments, and hospitals access to non-identifiable ED data for analysis purposes. These analyses assist health organizations in identifying possible syndromes (i.e. ILI, COVID-19, Rabies, etc.) and geographical areas of hotspots. This report contains information on completeness and validity of a select group of indicators along with timeliness, 24 hours or less, of record submittal to the Bio-Sense portal for processing. When it comes to data quality of completeness and validity the want is as close to 100 percent as possible, KSSP has an acceptable standard of 90 percent or better (>= 90% - green, < 90% - red). Your detail to data quality is greatly appreciated, as it improves our ability to detect and prevent public health problems. A more inclusive indicator report is shared with your IT group and we are always available to assist you with meeting data quality goals. We have been working with many hospitals for several years regarding public health surveillance.</p>\n<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>&nbsp;</p>\n<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>For more information regarding the group of indicators in the report, please visit the following link:<a href='https://www.kdheks.gov/phi/download/Emergency_Department_Visit_Records_Data_Quality_Report.pdf'> Emergency Department Visit Records Data Quality Report</a>. If you have concerns or questions, please contact me,",
+                           
+                           personname, ", ", title, ", ", sender, " for further discussion. To learn more about the program, please visit our Kansas Syndromic Surveillance Program (KSSP)  <a href='https://www.kdheks.gov/phi/KSSP.htm'>web page</a><a href='https://www.kdheks.gov/phi/KSSP.htm'>&nbsp;</a></span><span style='color: rgb(50, 49, 48); font-family: Calibri, sans-serif; font-size: 14.6667px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;'>  . Also, the Kansas Syndromic Surveillance Program (KSSP) group can be contacted by email <a href='mailto:kdhe.syndromic@ks.gov'>kdhe.syndromic@ks.gov</a>.</span></p>\n<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>Regards,</p>\n<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'><strong><span style='margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 14pt; line-height: inherit; font-family: inherit; vertical-align: baseline; color: inherit;'>&nbsp;</span></strong></p>")
+          
+        }
+        
+        else {
+          
+          bodytext = ""
+          
+          message = unlist(strsplit(message, "\n"))
+          
+          for (j in 1:length(message)) {
+            
+            if (message[j] == "") {
+              
+              bodytext = paste(bodytext, "<p>&nbsp; </p>")
+              
+            }
+            
+            else {
+              
+              message[j] = gsub("[*]personname[*]", personname,
+                                
+                                message[j])
+              
+              message[j] = gsub("[*]facilityname[*]",
+                                
+                                facilityname, message[j])
+              
+              message[j] = gsub("[*]phone[*]", phone,
+                                
+                                message[j])
+              
+              message[j] = gsub("[*]start[*]", as.Date(start),
+                                
+                                message[j])
+              
+              message[j] = gsub("[*]end[*]", as.Date(end),
+                                
+                                message[j])
+              
+              message[j] = gsub("[*]sender[*]", sender,
+                                
+                                message[j])
+              
+              message[j] = gsub("[*]title[*]", title,
+                                
+                                message[j])
+              
+              bodytext = paste(bodytext, "<p>", message[j],
+                               
+                               "</p>")
+              
+            }
+            
+          }
+          
+        }
+        
+        bodytext = paste(bodytext, "<p>&nbsp;</p>\n<p style= 'color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>Regards,</p>\n                 <p style='color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>Kansas Syndromic Surveillance Program</p>\n                 <p style='color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>",
+                         
+                         personname, ", ", title, "</p>\n                 <p style='color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>Bureau of Epidemiology and Public Health Informatics</p>\n                 <p style='color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>Kansas Department of Health and Environment</p>\n")
+        
+        receiver = unlist(strsplit(as.character(receiver),
+                                   
+                                   ";|,"))
+        
+        emailor <- envelope() %>% from(sender) %>% to(receiver) %>%
+          
+          cc("kdhe.syndromic@ks.gov") %>% subject(subject) %>%
+          
+          html(bodytext) %>% attachment(path = paste0(directory,
+                                                      
+                                                      "/", filename, "_Overall.xlsx"))
+        
+        smtp <- server(host = "smtp.office365.com", port = 587,
+                       
+                       username = sender, password = email_password,
+                       
+                       reuse = F)
+        
+        smtp(emailor, verbose = TRUE)
+        
+        emailed = "email sent"
+        
+      }
+      
+    }
+    
+  }
+  
+  return(emailed)
+  
+}
+
