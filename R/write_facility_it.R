@@ -424,3 +424,4 @@ write_facility_it <- function (username, password, table, mft, start, end, facil
   
 }
 
+export(write_facility_it)
