@@ -255,7 +255,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'><strong><span style='margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 14pt; line-height: inherit; font-family: inherit; vertical-align: baseline; color: inherit;'>&nbsp;</span></strong></p>")
         }else{
               bodytext=""
-              message=unlist(strsplit(message, '\n'))
+              message=unlist(strsplit(message))
           for (j in 1:length(message)){
             if (message[j]==""){
               bodytext=paste(bodytext,"<p>&nbsp; </p>") 
@@ -267,13 +267,13 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
               message[j]=gsub("[*]end[*]",as.Date(end),message[j])
               message[j]=gsub("[*]sender[*]",sender,message[j])
               message[j]=gsub("[*]title[*]",title,message[j])
-              bodytext=paste(bodytext,"<p>",message[j],"</p>")
+              bodytext=paste(bodytext,"<p>",message[j],)
             }
           }
               
         }
         
-        bodytext=paste(bodytext,"<p>&nbsp;</p>
+        bodytext=paste(bodytext,"
 <p style= 'color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>Regards,<p></p>
                  <p style='color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>Kansas Syndromic Surveillance Program</p>
                  <p style='color: rgb(32, 31, 30); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px 0px 0px 0pt;'>",personname,", ", title, "</p>
