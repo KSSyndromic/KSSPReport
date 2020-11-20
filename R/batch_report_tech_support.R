@@ -1,7 +1,7 @@
 #' Batch Job To Create NSSP BioSense Platform Data Quality Summary Reports for All Kansas Facilities in Production for the Tech Support
 #'
 #' @description
-#' This function iteratively performs `write_facilty_report`  function for all Kansas Facilities in production targeted toward Tech Support. It will generate summary report for all specified facility.
+#' This function iteratively performs `write_facilty_it`  function for all Kansas Facilities in production targeted toward Tech Support. It will generate summary report for all specified facility.
 #' The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
 #' report and creates a table. 
 #' @param facility_spreadsheet location of the facility spreadsheet xlsx
@@ -53,7 +53,7 @@ batch_all_production_tech_support<-function(facility_spreadsheet,table, mft, use
     for (i in 1:niter){
       if (is.na(contact$Status[i])==F & contact$Status[i]=="Production"){
         if (is.na(contact$`Facility IT Contacts Emails`[i])==F){
-          success[i]=write_facility_report(username=username, password=password, 
+          success[i]=write_facility_it(username=username, password=password, 
                                            table=table, mft=mft,
                                            start=start, 
                                            end=end,
