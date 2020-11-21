@@ -46,7 +46,7 @@ if (ready==T){
   contact <- contact[rowSums(is.na(contact))<ncol(contact),]
   niter= nrow(contact)
   success=NA
-  field="Administrative_Sex;Age_Reported;Age_Units_Reported;Diagnosis_Code;Diagnosis_Type;Discharge_Date_Time;Discharge_Disposition;Ethnicity_Code;Height;Height_Units;Medical_Record_Number;Patient_City;Patient_State;Patient_Zip;Race_Code;Smoking_Status_Code;Weight;Weight_Units"
+  field="Administrative_Sex;Age_Reported;Age_Units_Reported;C_Chief_Complaint;Chief_Complaint_Text_Short;Diagnosis_Code;Diagnosis_Type;Discharge_Date_Time;Discharge_Disposition;Ethnicity_Code;Height;Height_Units;Medical_Record_Number;Patient_City;Patient_State;Patient_Zip;Race_Code;Smoking_Status_Code;Weight;Weight_Units"
   for (i in 1:niter){
     if (is.na(contact$Status[i])==F & contact$Status[i]=="Production"){
       if (is.na(contact$`Facility Administrator Email`[i])==F){
