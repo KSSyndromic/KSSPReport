@@ -17,5 +17,4 @@ Imports:
   emayili, 
   ggplot2,
   yesno,
-  scales
 RoxygenNote: 7.1.0
