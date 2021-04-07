@@ -12,7 +12,6 @@
 #' @import scales
 #' @import RODBC
 #' @import stringr 
-#' @import rlang
 #' @import ngram
 #' 
 #' @export
