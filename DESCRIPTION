@@ -1,4 +1,4 @@
-Package: biosensequalityKS
+Package: biosensequalityV2
 Title: A Data Quality Report Generator for NSSP BioSense Platform. It automatically sends data quality report emails to all the facilities. 
 Version: 2.000
 Authors@R: person("Bo", "Zhang", email = "b021z055@kumc.edu", role = c("aut", "cre"))
