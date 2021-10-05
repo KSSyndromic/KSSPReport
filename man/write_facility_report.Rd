@@ -27,32 +27,25 @@ write_facility_report(
 )
 }
 \arguments{
-\item{username}{Your BioSense username, as a string. This is the same username you may 
-use to log into RStudio or Adminer.}
+\item{username}{Your BioSense username, as a string.}
 
-\item{password}{Your BioSense password, as a string. This is the same password you may 
-use to log into RStudio or Adminer.}
+\item{password}{Your BioSense password, as a string.}
 
 \item{table}{The table that you want to retrieve the data from, as a string.}
 
-\item{mft}{The MFT (master facilities table) from where the facility name will be 
-retrieved, as a string.}
+\item{mft}{The MFT (master facilities table)}
 
 \item{start}{The start date time that you wish to begin pulling data from, as a string.}
 
 \item{end}{The end data time that you wish to stop pulling data from, as a string.}
 
-\item{facility}{The C_Biosense_Facility_ID for the facility that you wish to generate and 
-write the report for.}
+\item{facility}{The C_Biosense_Facility_ID for the facility that you wish to generate}
 
-\item{directory}{The directory where you would like to write the reports to 
-(i.e., "~/Documents/MyReports"), as a string.}
+\item{directory}{The directory where you would like to write the reports to}
 
-\item{field}{Default NA. Can add a string with delimiter of ':'. Only fields that contain 
-those words will be included in the final report.}
+\item{field}{Default NA. Can add a string with delimiter of}
 
-\item{exclude}{Default NA. Can add a string with delimiter of ':'. Exclude fields with 
-certain keywords in the final report.}
+\item{exclude}{Default NA. Can add a string with delimiter of}
 
 \item{optional}{Default True. If False then remove all optional fields}
 
@@ -73,12 +66,8 @@ certain keywords in the final report.}
 \item{message}{The email message to be sent. Allows for composition of costume messages.}
 }
 \value{
-A report table stored at directory location. If email=TRUE, then a email will 
-  be sent, along with a confirmation of email being sent.
+A report table stored at directory location.
 }
 \description{
-This function is a `write_reports` function. It will generate summary report 
-  for one specified facility. The summary workbook shows percents and counts of nulls and 
-  invalids, Additionally it generates a timeliness. report and creates a table. The 
-  program can send out a report to designated email address
+Write NSSP BioSense Platform Data Quality Summary Reports for One Facility
 }
