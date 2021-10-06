@@ -1,6 +1,6 @@
 Package: biosensequality
 Title: Data Quality Report Generator for NSSP BioSense Platform
-Version: 2.0.0.9000
+Version: 2.0.0.9001
 Date: 2021-10-01
 Authors@R: c(person("Bo", "Zhang", email = "b021z055@kumc.edu", role = c("aut")), 
     person("Bo", "Zhang", email = "b021z055@kumc.edu", role = c("cre")))
