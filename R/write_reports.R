@@ -1,21 +1,43 @@
-#' Write NSSP BioSense Platform Data Quality Summary Reports, Using Local Data
+#' Write NSSP BioSense Platform Data Quality Summary Reports
 #' 
 #' @description 
-#' The `write_reports` function will do a data pull using RODBC. In case you do not have a connection to BioSense_Platform through RODBC, you can
-#' use this function to run the reports on data that are loaded to your current R session. That way, you can load in files yourself if you need to write
-#' reports for data have already been pulled or been pulled down using other means than the RODBC package.
+#' This function calls upon all of the other functions in the package to write a large number of Excel workbooks. First,
+#' it generates a state summary workbook that shows percents and counts of nulls and invalids at both the facility and statewide level,
+#' as well as message delivery lag (i.e., timeliness reports). Second, it generates a summary workbook for every single facility
+#' that includes only information for that facility. Third, it generates an example workbook for every single facility, including 
+#' detailed information on records and visits that are null or invalid. These example workbooks make the function longer to run,
+#' so by default this function does not generate them (see `nexamples` input below).
 #' 
-#' @param data A data frame of raw data from the BioSense Platform.
-#' @param fnames A data frame that includes two variables: C_Biosense_Facility_ID and Facility_Name. Make sure there is NO repeat C_Biosense_Facility_ID numbers.
+#' @param username Your BioSense username, as a string. This is the same username you may use to log into RStudio or Adminer.
+#' @param password Your BioSense password, as a string. This is the same password you may use to log into RStudio or Adminer.
+#' @param table The table that you want to retrieve the data from, as a string.
+#' @param mft The MFT (master facilities table) from where the facility names will be retrieved, as a string.
+#' @param raw I don't know what goes into this variable
+#' @param start The start date time that you wish to begin pulling data from, as a string.
+#' @param end The end data time that you wish to stop pulling data from, as a string.
 #' @param directory The directory where you would like to write the reports to (i.e., "~/Documents/MyReports"), as a string.
 #' @param nexamples An integer number of examples you would like for each type of invalid or null field in the examples workbooks for each facility.
-#'   This defaults to 0, which will not generate these example workbooks.
+#' This defaults to 0, which will not generate these example workbooks.
+#' @param offset The number of hours you wish to offset Arrived_Date_Time (which is in UTC). The offset value is how far off your local time zone is from UTC. 
+#' For example, the Central Time Zone would set this to 5 or 6, depending on if it is daylight savings or not. This value should be an integer. 
+#' This is used for timeliness reports using the `va_lag` function.
 #' @import dplyr
 #' @import tidyr
 #' @import openxlsx
 #' @importFrom stringr str_replace_all
 #' @export
-write_reports_local <- function(data, fnames, directory="", nexamples=0) {
+write_reports <- function(username, password, table, mft, raw, start, end, directory="", nexamples=0, offset) {
+  
+  ## get data and names
+  pull <- pull_data(username, password, table, mft, raw, start, end)
+  # save data into data
+  data <- pull$data
+  if (nrow(data) == 0) stop("The query yielded no data.")
+  # save names into names, getting rid of any duplicate names (take first listed)
+  fnames <- pull$names %>% group_by(C_Biosense_Facility_ID) %>% slice(1) %>% ungroup()
+  
+  batchdata<-pull$batchdata
+  
   
   ## state-wide summary
   # get facility-level state summary of required nulls
@@ -35,6 +57,7 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
   # overall , state-level average
   statewides <- statewide(data, state_req_nulls, state_opt_nulls, state_invalids)
   
+                            
   # writing xlsx
   wb <- createWorkbook() # create workbook
   hs <- createStyle(fgFill="#4f81bd", halign="left", valign="top", textDecoration="bold", wrapText=TRUE)
@@ -87,10 +110,10 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
   
   # write workbook
   saveWorkbook(wb, paste0(directory, "/State_Summary.xlsx"), overwrite=TRUE)
-  
-  
-  
-  
+
+
+
+
   ## facility by facility summary
   for (i in data$C_Biosense_Facility_ID[!duplicated(data$C_Biosense_Facility_ID)]) { # for every unique facility id
     # getting first and last visit date times
@@ -103,13 +126,13 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
     hl7_values$Field <- as.character(hl7_values$Field)
     # get name of facility
     fname <- as.character(unlist(unname(c(fnames[which(fnames$C_Biosense_Facility_ID==i),1]))))
-    
+
     # write to xlsx
     # initialize workbook
     wb <- createWorkbook()
     # sheet 1: facility information
     sheet1 <- addWorksheet(wb, "Facility Information")
-       subdata=data%>%
+    subdata=data%>%
             filter(C_Biosense_Facility_ID==i)
     visits_per_day=avg_visit_per_day(subdata)
     visit_length=avg_visit_length(subdata)$Visit_Length
@@ -192,15 +215,14 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
     writeDataTable(wb,sheet1,Trigger,startCol=1,startRow=nrow(facility_table)+22,headerStyle=hs, colNames=TRUE,rowNames=FALSE,firstColumn=TRUE)
       
     setColWidths(wb, sheet1, 1:9, "auto")
-    
-    # sheet 2: required nulls
+    ## sheet 2: required nulls
     sheet2 <- addWorksheet(wb, "Required Nulls") # initialize sheet
-    # making data for it
+     ##making data for it
     facsheet2data <- statewides$statewide_reqnull %>% # take state average
-      filter(Measure=="Percent") %>% # only percent
+     filter(Measure=="Percent") %>% # only percent
       select(-Location, -Measure) %>% # select vars only needed
       gather(Field, State_Percent, 1:ncol(.)) %>% # put into long format
-      left_join(one_facility_summary(state_req_nulls, i), ., by="Field") # join with one facility summary
+      left_join(one_facility_summary(state_req_nulls[,-c(2,3)], i), ., by="Field") # join with one facility summary
     writeDataTable(wb, sheet2, facsheet2data, firstColumn=TRUE,headerStyle=hs, bandedRows=TRUE) # write to table
     setColWidths(wb, sheet2, 1:ncol(facsheet2data), "auto") # format sheet
     freezePane(wb, sheet2, firstActiveRow=2) # format sheet
@@ -211,7 +233,7 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
       filter(Measure=="Percent") %>% # only percent
       select(-Location, -Measure) %>% # select vars only needed
       gather(Field, State_Percent, 1:ncol(.)) %>% # put into long format
-      left_join(one_facility_summary(state_opt_nulls, i), ., by="Field") # join with one facility summary
+      left_join(one_facility_summary(state_opt_nulls[,-c(2,3)], i), ., by="Field") # join with one facility summary
     writeDataTable(wb, sheet3, facsheet3data, firstColumn=TRUE,headerStyle=hs, bandedRows=TRUE) # write to table
     setColWidths(wb, sheet3, 1:ncol(facsheet3data), "auto") # format sheet
     freezePane(wb, sheet3, firstActiveRow=2) # format sheet
@@ -222,11 +244,14 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
       filter(Measure=="Percent") %>% # only percent
       select(-Location, -Measure) %>% # select vars only needed
       gather(Field, State_Percent, 1:ncol(.)) %>% # put into long format
-      left_join(one_facility_summary(state_invalids, i), ., by="Field") # join with one facility summary
+      left_join(one_facility_summary(state_invalids[,-c(2,3)], i), ., by="Field") # join with one facility summary
     writeDataTable(wb, sheet4, facsheet4data, firstColumn=TRUE,headerStyle=hs, bandedRows=TRUE) # write to table
     setColWidths(wb, sheet4, 1:ncol(facsheet4data), "auto") # format sheet
     freezePane(wb, sheet4, firstActiveRow=2) # format sheet
-   ## batch information
+
+    
+    
+    ## batch information
     sheet5 <- addWorksheet(wb, "Batch_Information")
     ##compute the average number of messages per batch for each Feed_Name
     Batch_Mean=subdata%>%
@@ -352,8 +377,7 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
     
     writeDataTable(wb,sheet11,check_date,colNames=TRUE,rowNames=FALSE,headerStyle=hs, firstColumn=TRUE, bandedRows=TRUE)
     setColWidths(wb,sheet11,1:3,"auto")
-  
-    ## write to file
+   # write to file
     filename <- str_replace_all(fname, "[^[a-zA-z\\s0-9]]", "") %>% # get rid of punctuation from faciltiy name
       str_replace_all("[\\s]", "_") # replace spaces with underscores
     saveWorkbook(wb, paste0(directory, "/", filename, "_Summary.xlsx"), overwrite=TRUE)
@@ -363,7 +387,7 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
   
   
   ## facility by facility examples
- if (nexamples > 0) {
+  if (nexamples > 0) {
     
     # get list of invalid examples data frames
     # DO NOT CHANGE THE ORDER OF THIS LIST
@@ -442,7 +466,7 @@ write_reports_local <- function(data, fnames, directory="", nexamples=0) {
         group_by(Null_Field) %>% # group by type of field
         slice(1:nexamples) # get nexamples
       
-      ## write to excel workbook
+      # write to excel workbook
       wb <- createWorkbook()
       # sheet 1: invalids
       sheet1 <- addWorksheet(wb, "Invalids")

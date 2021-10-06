@@ -3,6 +3,7 @@
 export(admit_source_invalid)
 export(get_req_nulls_BZ)
 export(write_facility_report)
+export(write_reports)
 export(write_reports_local)
 export(zip_invalid)
 import(RODBC)
