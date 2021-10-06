@@ -3,6 +3,7 @@
 export(admit_source_invalid)
 export(get_req_nulls_BZ)
 export(pull_data)
+export(write_facility)
 export(write_facility_excel)
 export(write_facility_it)
 export(write_facility_report)
