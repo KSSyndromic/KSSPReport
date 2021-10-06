@@ -1,3 +1,6 @@
+#' Write Facility Write-In
+#'
+#' @return a data frame produced by write_facility_report
 write_facility_bo_write_in <- function(){
   
   
