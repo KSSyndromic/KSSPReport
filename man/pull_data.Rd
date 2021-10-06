@@ -23,7 +23,7 @@ pull_data(username, password, table, mft, raw, start, end)
 }
 \value{
 A list of two data frames: first, raw data of all columns from the `table` that was called; second, just the Facility_Name
-and C_Biosense_Facility_ID from the MFT table.
+  and C_Biosense_Facility_ID from the MFT table.
 }
 \description{
 This will pull down data from NSSP's BioSense Platform. It assumes you have a valid connection to BioSense_Platform log-in.

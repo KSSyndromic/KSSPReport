@@ -10,7 +10,7 @@
 #' @param start The start date time that you wish to begin pulling data from, as a string.
 #' @param end The end data time that you wish to stop pulling data from, as a string.
 #' @return A list of two data frames: first, raw data of all columns from the `table` that was called; second, just the Facility_Name
-#' and C_Biosense_Facility_ID from the MFT table.
+#'   and C_Biosense_Facility_ID from the MFT table.
 #' @import RODBC
 #' @export
 pull_data <- function(username, password, table, mft, raw, start, end) {
