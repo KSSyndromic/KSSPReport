@@ -1,4 +1,4 @@
-#' Getting Invalid Examples and Summaries for Weight and Weight_Units
+#' Get Invalid Examples and Summaries for Weight and Weight_Units
 #'
 #' This function will generate two data frames: first, a frame to be used later to extract invalid examples from;
 #' second, a frame that contains facility-level summaries for counts and percentages of invalid Weight and Weight_Units.
