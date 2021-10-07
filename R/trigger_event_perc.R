@@ -4,6 +4,11 @@
 
 ##Trigger_Event
 
+#' Frequency of occurrence in data
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 trigger_event_perc<-function(data){
   number_visits=n_groups(group_by(data,C_BioSense_ID))
   
