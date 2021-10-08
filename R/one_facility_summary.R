@@ -5,7 +5,7 @@
 #' @param getsummary A summary from `get_req_nulls`, `get_opt_nulls`, or `get_all_invalids`.
 #' @param i A facility ID, as a character string.
 #' @return The information for only the given facility from the given table, transposed and formatted for `write_reports` to place it in a 
-#' facility summary Excel workbook.
+#'   facility summary Excel workbook.
 #' @import dplyr
 #' @import tidyr
 #' @export
