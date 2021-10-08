@@ -23,14 +23,17 @@
 #' @param personname Your Name to be used in your email text
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
-#'  @param message The email message to be sent. Allows for composition of costume messages.
+#' @param message The email message to be sent. Allows for composition of costume messages.
 #' @return Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. 
 #' 
 #' @examples 
-#' write_facility_excel("Input.xlsx")
-#' repeated_facility_excel("Input.xlsx", contact = contact)
-#' ##you can override fields from the input.xlsx
-#' repeated_facility_excel("Input.xlsx", contact = contact,field='age',email=F)
+#' \dontrun{
+#'   write_facility_excel("Input.xlsx")
+#'   repeated_facility_excel("Input.xlsx", contact = contact)
+#'   ##you can override fields from the input.xlsx
+#'   repeated_facility_excel("Input.xlsx", contact = contact,field='age',email=F)
+#' }
+#' 
 #' @import dplyr
 #' @import tidyr
 #' @import readxl
@@ -39,58 +42,58 @@
 repeated_facility_excel <- function(input, contact,table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,directory=NA,field=NA,exclude=NA,optional=T,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA,message=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
-  username <- as.character(Input[1,2])
+    username <- as.character(Input[1,2])
   }
   if (is.na(password)){
-  password <- as.character(Input[2,2])
+    password <- as.character(Input[2,2])
   }
   if (is.na(table)){
-  table <- as.character(Input[3,2])
+    table <- as.character(Input[3,2])
   }
   if(is.na(mft)){
-  mft <- as.character(Input[4,2])
+    mft <- as.character(Input[4,2])
   }
   if(is.na(start)){
-  start <- as.POSIXct(as.numeric(Input[5,2] ) *(60*60*24),origin= '1899-12-30')  
+    start <- as.POSIXct(as.numeric(Input[5,2] ) *(60*60*24),origin= '1899-12-30')  
   }
   if(is.na(end)){
-  end <- as.POSIXct(as.numeric(Input[6,2] ) *(60*60*24),origin= '1899-12-30')  
+    end <- as.POSIXct(as.numeric(Input[6,2] ) *(60*60*24),origin= '1899-12-30')  
   }
   if(is.na(directory)){
-  directory <- as.character(Input[8,2])
+    directory <- as.character(Input[8,2])
   }
   if(is.na(field)) {
-  field <- ifelse(is.na(Input[9,2]),NA, as.character(Input[9,2]))
+    field <- ifelse(is.na(Input[9,2]),NA, as.character(Input[9,2]))
   }
   if(is.na(exclude)) {
-  exclude <- ifelse(is.na(Input[10,2]),NA, as.character(Input[10,2]))
+    exclude <- ifelse(is.na(Input[10,2]),NA, as.character(Input[10,2]))
   }
   if(is.na(email)) {
-  email <-as.logical (Input[11,2])
+    email <-as.logical (Input[11,2])
   }
   if(is.na(sender)) {
-  sender<-as.character(Input[12,2])
+    sender<-as.character(Input[12,2])
   }
   if(is.na(email_password)) {
-  email_password <-as.character(Input[13,2])
+    email_password <-as.character(Input[13,2])
   }
   if(is.na(personname)) {
-  personname<-as.character(Input[15,2])
+    personname<-as.character(Input[15,2])
   }
   if(is.na(title)) {
-  title<- as.character(Input[16,2])
+    title<- as.character(Input[16,2])
   }
   if(is.na(phone)){
-  phone<- as.character(Input[17,2])
+    phone<- as.character(Input[17,2])
   }
   if(is.na(message)){
     message<- ifelse(is.na(Input[18,2]),NA, as.character(Input[18,2]))
   }
   repeated_facility_table(contact=contact, username=username, password=password, 
-                        table=table, mft=mft,
-                        start=start, 
-                        end=end,
-                        directory=directory,exclude=exclude,field=field,optional = optional,
-                        email =email, sender=sender,
-                        email_password=email_password,personname=personname,title=title, phone=phone,message=message)
+                          table=table, mft=mft,
+                          start=start, 
+                          end=end,
+                          directory=directory,exclude=exclude,field=field,optional = optional,
+                          email =email, sender=sender,
+                          email_password=email_password,personname=personname,title=title, phone=phone,message=message)
 }
