@@ -3,6 +3,11 @@
 ##accounts for.
 ## If the input is empty, say "Missing"
 ## smoking status description
+#' Frequency of occurrence in data - what is actually occurring in the data
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 smoking_status_description_perc<-function(data){
   Smoking_Status_Description=data%>%
     select(C_BioSense_ID, Smoking_Status_Description)%>%
