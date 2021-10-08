@@ -3,6 +3,11 @@
 ##accounts for. 
 ## If the input is empty, say "Missing"
 ## Race_Code
+#' Frequency of occurrence in data - what is actually occurring in the data 
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 race_code_perc<-function(data){
   Race_Code=data%>%
     select(C_BioSense_ID,Race_Code)%>%
