@@ -1,5 +1,11 @@
-#' this function will compute the lag between message recorded and visit time, between message sent and message recorded time, arrival
-#' and message sent time, arrival and visit time, for the earliest recorded non NA Diagnosis_Code
+#' Compute Lag between Items
+#' 
+#' @description This function Computes the lag between message recorded and visit time, between message 
+#'   sent and message recorded time, arrival and message sent time, arrival and visit time, for the 
+#'   earliest recorded non NA Diagnosis_Code.
+#'
+#' @param data a data frame
+#' @return a data frame
 
 lag_diagnosis<-function(data){
    LagTime=data %>%
