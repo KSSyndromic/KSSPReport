@@ -3,6 +3,7 @@
 export(admit_source_invalid)
 export(get_req_nulls_BZ)
 export(pull_data)
+export(smoking_status_invalid)
 export(state_invalid)
 export(statewide)
 export(temperature_invalid)
