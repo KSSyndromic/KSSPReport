@@ -2,6 +2,7 @@
 
 export(admit_source_invalid)
 export(get_req_nulls_BZ)
+export(height_invalid)
 export(one_facility_summary)
 export(patient_class_invalid)
 export(pull_data)
