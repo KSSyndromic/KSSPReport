@@ -1,5 +1,10 @@
 ## Lag by trigger event
 
+#' Raise Lag by Trigger Event
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 lag_by_trigger<-function(data){
   Lag_by_Trigger=data%>%
     select(C_Biosense_Facility_ID, C_BioSense_ID, Arrived_Date_Time, C_Visit_Date_Time, Message_Date_Time,
