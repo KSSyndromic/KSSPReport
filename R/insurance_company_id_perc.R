@@ -3,6 +3,11 @@
 ##accounts for. 
 ## If the input is empty, say "Missing"
 ## Insurance_Company_ID
+#' Insurance Company ID Percent
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 insurance_company_id_perc<-function(data){
   Insurance_Company_ID=data%>%
     select(C_BioSense_ID, Insurance_Company_ID)%>%
