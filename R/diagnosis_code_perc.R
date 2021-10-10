@@ -3,6 +3,11 @@
 ##accounts for. 
 ## For variable Diagnosis_Code
 
+#' Get Diagnosis_code Frequency Percent
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 diagnosis_code_perc<-function(data){
   number_visits=n_groups(group_by(data,C_BioSense_ID))
   
