@@ -3,6 +3,11 @@
 ##accounts for. 
 ## If the input is empty, say "Missing"
 ## Ethnicity_Code
+#' Get Frequency of Ethnicity Codes
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 ethnicity_code_perc<-function(data){
   Ethnicity_Code=data%>%
     select(C_BioSense_ID,Ethnicity_Code)%>%
