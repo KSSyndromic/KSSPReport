@@ -3,6 +3,11 @@
 ##accounts for. 
 ## If the input is empty, say "Missing"
 ## discharge disposition
+#' Get Frequency of discharge disposition
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 discharge_disposition_perc<-function(data){
   number_visits=n_groups(group_by(data,C_BioSense_ID))
   
