@@ -5,6 +5,11 @@
 ## If the input is empty, say "Missing"
 ## Diagnosis_Type
 
+#' Get Diagnosis Type Frequency
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 diagnosis_type_perc<-function(data){
    number_visits=n_groups(group_by(data,C_BioSense_ID))
    
