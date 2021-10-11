@@ -3,6 +3,11 @@
 ##accounts for. 
 ## If the input is empty, say "Missing"
 ##country
+#' Frequency by Country
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 country_perc<-function(data){
   Country=data%>%
     select(C_BioSense_ID, Patient_Country)%>%
