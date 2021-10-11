@@ -1,5 +1,10 @@
 ## Show each unique Chief_Complaint_Text for each visit (C_BioSense_ID) and each Medical_Record_Number
 ## and the frequency for each Chief_Complaint_Text.
+#' Chief Complaint Text Count
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 chief_complaint_text_count<-function(data){
   chief_complaint_text=data%>%
     select(Chief_Complaint_Text,C_BioSense_ID,Medical_Record_Number)%>%
