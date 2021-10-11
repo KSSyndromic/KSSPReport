@@ -3,6 +3,11 @@
 ##accounts for.
 ## If the input is empty, say "Missing"
 ##county
+#' Frequency by County
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 county_perc<-function(data){
   County=data%>%
     select(C_BioSense_ID, C_Patient_County)%>%
