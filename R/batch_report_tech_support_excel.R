@@ -1,10 +1,10 @@
-#' Batch Job To Create NSSP BioSense Platform Data Quality Summary Reports for All Kansas Facilities in Production for the Tech Support, Use excel as input
+#' Batch Job To Create NSSP BioSense Platform Data Quality Summary Reports 
 #'
 #' @description
 #' This function uses excel generated information but can be override by additional inputs
 #' This function iteratively performs `write_facilty_report`  function for all Kansas Facilities in production targeted toward tech supports. It will generate summary report for all specified facility.
 #' The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
-#' report and creates a table. 
+#' report and creates a table. This report is for All Kansas Facilities in Production for the Tech Support and uses excel as input
 #' @param input location of input.xlsx file.
 #' @param facility_spreadsheet location of the facility spreadsheet xlsx
 #' @param username Your BioSense username, as a string. This is the same username you may use to log into RStudio or Adminer.
@@ -25,18 +25,21 @@
 #' @param phone Your phone number to be used in your email text
 #' @param message The email message to be sent. Allows for composition of costume messages.
 #' @return First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. In addition, there will be a TechReport.csv file listing whether the email got sent.
-#' 
-#' @examples 
-#' library(biosensequality)
-#' batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx")
-#' ##you can override fields from the input.xlsx
-#' batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx",email=F)
 #' @import dplyr
 #' @import tidyr
 #' @import readxl
+#' @examples
+#' \dontrun{
+#'   library(biosensequality)
+#'   batch_all_production_tech_support_excel(facility_spreadsheet = "Facilities Spreadsheet_New.xlsx", 
+#'   input ="Input.xlsx")
+#'   ##you can override fields from the input.xlsx
+#'   batch_all_production_tech_support_excel(facility_spreadsheet = "Facilities Spreadsheet_New.xlsx", 
+#'   input = "Input.xlsx", email= F)
+#' } 
 #' @export
 #' 
-batch_all_production_tech_support_excel <- function(facility_spreadsheet,input, table=NA, mft=NA, username=NA,password=NA,start=NA, end=NA,field=NA,optional=T,exclude=NA, directory=NA,email=NA, sender=NA,email_password=NA,personname=NA,title=NA, phone=NA,message=NA){
+batch_all_production_tech_support_excel <- function(facility_spreadsheet, input, table=NA, mft=NA, username=NA, password=NA, start=NA, end=NA, field=NA, optional=T, exclude=NA, directory=NA, email=NA, sender=NA, email_password=NA, personname=NA, title=NA, phone=NA, message=NA){
   Input <- read_excel(input, col_names = FALSE)
   if (is.na(username)){
     username <- as.character(Input[1,2])
