@@ -21,5 +21,5 @@ Imports:
   readxl, 
   emayili, 
   ggplot2,
-  yesno,
+  yesno
 RoxygenNote: 7.1.2
