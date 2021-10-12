@@ -1,5 +1,10 @@
+#' Calculate lag between Chief Complaints and other Variables
 #' this function will compute the lag between message recorded and visit time, between message sent and message recorded time, arrival
 #' and message sent time, arrival and visit time, for the earliest recorded non NA C_Chief_Complaints
+#'
+#' @param data a data frame
+#' 
+#' @return a data frame
 
 lag_chief_complaint<-function(data){
   LagTime=data %>%
@@ -12,15 +17,15 @@ lag_chief_complaint<-function(data){
            Record=as.POSIXct(Recorded_Date_Time,format="%Y-%m-%d %H:%M:%S"))%>%
     group_by(C_BioSense_ID)%>%
     slice(which.min(Record))
-
-
+  
+  
   Time_Diff=LagTime%>%
-   mutate(lag_Record_Visit=as.numeric(difftime(Record,Visit,units="hours")),
-         lag_Message_Record=as.numeric(difftime(Message,Record,units="hours")),
-         lag_Arrival_Message=as.numeric(difftime(Arrived,Message,units="hours")),
-         lag_Arrival_Visit=as.numeric(difftime(Arrived,Visit,units="hours"))         
+    mutate(lag_Record_Visit=as.numeric(difftime(Record,Visit,units="hours")),
+           lag_Message_Record=as.numeric(difftime(Message,Record,units="hours")),
+           lag_Arrival_Message=as.numeric(difftime(Arrived,Message,units="hours")),
+           lag_Arrival_Visit=as.numeric(difftime(Arrived,Visit,units="hours"))         
     )
-
+  
   Lag_Summary=Time_Diff %>%
     group_by(C_Biosense_Facility_ID)%>%
     summarise(Record_Visit=round(mean(lag_Record_Visit,na.rm=TRUE),2),
