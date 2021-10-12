@@ -24,7 +24,10 @@
 #' @param message The email message to be sent. Allows for composition of costume messages.
 #' @return Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent. 
 #' 
+#' @export
+#' 
 #' @examples 
+#' \dontrun{
 #' write_facility_excel("Input.xlsx")
 #' library(keyring)
 #' 
@@ -34,15 +37,16 @@
 #' key_set(service = "email")
 #' Facilities_Spreadsheet <- read_excel("Facilities Spreadsheet.xlsx", 
 #' sheet = "Data Quality Reports")
-#' contact<-as.data.frame(cbind(Facilities_Spreadsheet$C_Biosense_Facility_ID, Facilities_Spreadsheet$`Facilty Contact Email`)) 
+#' contact<-as.data.frame(cbind(Facilities_Spreadsheet$C_Biosense_Facility_ID, 
+#' Facilities_Spreadsheet$`Facilty Contact Email`)) 
 #' colnames(contact)=c('facility','receiver')
 #' repeated_facility_table(contact=contact, username="bzhang02", password=key_get("essence"),
 #'  table="KS_PR_Processed", mft="KS_MFT",  start="2020-05-01 00:00:00", 
 #'  end="2020-05-30 23:59:59", directory="~",
 #'  email =TRUE,sender="bo.zhang@@kdhe.ks.gov",
 #' email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
-#' @export
-repeated_facility_table<-function(contact,table, mft, username,password,start, end,directory,field=NA,exclude=NA,optional=T,email=F, sender,email_password,personname=NA,title=NA, phone=NA,message=NA){
+#' }
+repeated_facility_table <- function(contact,table, mft, username,password,start, end,directory,field=NA,exclude=NA,optional=T,email=F, sender,email_password,personname=NA,title=NA, phone=NA,message=NA){
 niter= nrow(contact)
 success=NA
 for (i in 1:niter){
