@@ -4,6 +4,11 @@
 ## If the input is empty, say "Missing"
 ## C_MFT_Patient_Class
 
+#' Frequency of occurrence in data - what is actually occurring in the data 
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 patient_class_perc<-function(data){
   number_visits=n_groups(group_by(data,C_BioSense_ID))
   

@@ -26,6 +26,8 @@ write_facility(
 
 \item{mft}{The MFT (master facilities table) from where the facility name will be retrieved, as a string.}
 
+\item{raw}{Again I have no idea about what goes in there}
+
 \item{start}{The start date time that you wish to begin pulling data from, as a string.}
 
 \item{end}{The end data time that you wish to stop pulling data from, as a string.}

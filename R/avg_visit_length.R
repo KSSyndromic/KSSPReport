@@ -1,5 +1,9 @@
-##compute the average length of each visit
 
+#' compute the average length of each visit
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 avg_visit_length<-function(data){
   Avg_Visit_Length=data%>%
     select(C_Biosense_Facility_ID, C_BioSense_ID, C_Visit_Date_Time,Discharge_Date_Time)%>%

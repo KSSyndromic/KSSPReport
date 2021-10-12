@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulseox_invalid.R
 \name{pulseox_invalid}
 \alias{pulseox_invalid}
-\title{Getting Invalid Examples and Summaries for Initial_Pulse_Oximetry and Initial_Pulse_Oximetry_Units}
+\title{Get Invalid Examples and Summaries for Initial_Pulse_Oximetry and Initial_Pulse_Oximetry_Units}
 \usage{
 pulseox_invalid(data)
 }

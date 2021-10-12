@@ -5,6 +5,13 @@
 ## for variable Race_Description
 
 ## Ethnicity_Description
+#' Ethnicity_Description Percent
+#'
+#' @param data a data frame
+#' @importFrom graphics title
+#' @importFrom utils data
+#'
+#' @return a data frame
 ethnicity_description_perc<-function(data){
   Ethnicity_Description=data%>%
     select(C_BioSense_ID,Ethnicity_Description)%>%

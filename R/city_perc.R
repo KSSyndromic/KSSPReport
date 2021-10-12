@@ -1,9 +1,14 @@
 ##Frequency of occurrence in data - what is actually occurring in the data and
 ##how often each distinct entry is occurring and percentage of all visits each entry
 ##accounts for. 
-## If the input is empty, say "Missing"
+##If the input is empty, say "Missing"
 ##city
 
+#' Frequency by City
+#'
+#' @param data a data frame 
+#'
+#' @return a data frame
 city_perc<-function(data){
   City=data%>%
     select(C_BioSense_ID, Patient_City)%>%

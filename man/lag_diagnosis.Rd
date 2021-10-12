@@ -2,12 +2,18 @@
 % Please edit documentation in R/lag_diagnosis.R
 \name{lag_diagnosis}
 \alias{lag_diagnosis}
-\title{this function will compute the lag between message recorded and visit time, between message sent and message recorded time, arrival
-and message sent time, arrival and visit time, for the earliest recorded non NA Diagnosis_Code}
+\title{Compute Lag between Items}
 \usage{
 lag_diagnosis(data)
 }
+\arguments{
+\item{data}{a data frame}
+}
+\value{
+a data frame
+}
 \description{
-this function will compute the lag between message recorded and visit time, between message sent and message recorded time, arrival
-and message sent time, arrival and visit time, for the earliest recorded non NA Diagnosis_Code
+This function Computes the lag between message recorded and visit time, between message 
+  sent and message recorded time, arrival and message sent time, arrival and visit time, for the 
+  earliest recorded non NA Diagnosis_Code.
 }

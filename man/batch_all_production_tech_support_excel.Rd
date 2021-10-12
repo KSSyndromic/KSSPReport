@@ -2,7 +2,7 @@
 % Please edit documentation in R/batch_report_tech_support_excel.R
 \name{batch_all_production_tech_support_excel}
 \alias{batch_all_production_tech_support_excel}
-\title{Batch Job To Create NSSP BioSense Platform Data Quality Summary Reports for All Kansas Facilities in Production for the Tech Support, Use excel as input}
+\title{Batch Job To Create NSSP BioSense Platform Data Quality Summary Reports}
 \usage{
 batch_all_production_tech_support_excel(
   facility_spreadsheet,
@@ -72,11 +72,15 @@ First the program will ask if the facility spread sheet is up to date. If answer
 This function uses excel generated information but can be override by additional inputs
 This function iteratively performs `write_facilty_report`  function for all Kansas Facilities in production targeted toward tech supports. It will generate summary report for all specified facility.
 The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
-report and creates a table.
+report and creates a table. This report is for All Kansas Facilities in Production for the Tech Support and uses excel as input
 }
 \examples{
-library(biosensequality)
-batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx")
-##you can override fields from the input.xlsx
-batch_all_production_tech_support_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx",email=F)
+\dontrun{
+  library(biosensequality)
+  batch_all_production_tech_support_excel(facility_spreadsheet = "Facilities Spreadsheet_New.xlsx", 
+  input ="Input.xlsx")
+  ##you can override fields from the input.xlsx
+  batch_all_production_tech_support_excel(facility_spreadsheet = "Facilities Spreadsheet_New.xlsx", 
+  input = "Input.xlsx", email= F)
+} 
 }

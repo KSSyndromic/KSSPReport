@@ -1,5 +1,10 @@
 ## compute the average number of messages (with same File_Name) per batch for each Feed_Name
 
+#' compute the average number of messages 
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 mean_message_per_batch<-function(data){
   Message_Per_Batch=data%>%
     group_by(Feed_Name,File_Name)%>%

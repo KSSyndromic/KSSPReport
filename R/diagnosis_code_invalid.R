@@ -1,5 +1,10 @@
 ## check the validity of diagnosis code; valid diagnosis code should contain letters
 ## if the diagnosis code is non NULL, and there are only numbers (no letters), it is defined as invalid
+#' Check the validity of diagnosis code
+#'
+#' @param data a data frame
+#'
+#' @return a list
 diagnosis_code_invalid<-function(data){
   snomed<-data%>%
     select(C_Biosense_Facility_ID, C_BioSense_ID,Diagnosis_Code)

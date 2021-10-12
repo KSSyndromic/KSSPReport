@@ -1,4 +1,9 @@
-## compute the number of batches per day and the average time between batches for each facility
+
+#' compute the number of batches per day and the average time between batches for each facility
+#'
+#' @param data a data frame 
+#'
+#' @return a data frame
 batch_info<-function(data){
   ## compute the number of batches per day for each Feed_Name
   Batch_Per_Day=data%>%
@@ -16,7 +21,7 @@ batch_info<-function(data){
   
   
   return(Batch_Per_Day%>%
-    left_join(.,Time_Bet_Batch,by = c("Feed_Name", "Arrived_Date"))
+    left_join(., Time_Bet_Batch, by = c("Feed_Name", "Arrived_Date"))
   )
 }
 

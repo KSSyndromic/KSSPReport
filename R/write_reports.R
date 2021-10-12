@@ -12,6 +12,7 @@
 #' @param password Your BioSense password, as a string. This is the same password you may use to log into RStudio or Adminer.
 #' @param table The table that you want to retrieve the data from, as a string.
 #' @param mft The MFT (master facilities table) from where the facility names will be retrieved, as a string.
+#' @param raw Have no idea what goes into this variable. 
 #' @param start The start date time that you wish to begin pulling data from, as a string.
 #' @param end The end data time that you wish to stop pulling data from, as a string.
 #' @param directory The directory where you would like to write the reports to (i.e., "~/Documents/MyReports"), as a string.
@@ -25,7 +26,7 @@
 #' @import openxlsx
 #' @importFrom stringr str_replace_all
 #' @export
-write_reports <- function(username, password, table, mft,raw, start, end, directory="", nexamples=0, offset) {
+write_reports <- function(username, password, table, mft, raw, start, end, directory="", nexamples=0, offset) {
   
   ## get data and names
   pull <- pull_data(username, password, table, mft, raw, start, end)

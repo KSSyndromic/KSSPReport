@@ -4,6 +4,11 @@
 ## If the input is empty, say "Missing"
 ## for variable Race_Description
 
+#' Calculate frequencies for Race_Description Variable
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 race_description_perc<-function(data){
   Race_Description=data%>%
     select(C_BioSense_ID,Race_Description)%>%

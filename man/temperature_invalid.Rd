@@ -2,7 +2,7 @@
 % Please edit documentation in R/temperature_invalid.R
 \name{temperature_invalid}
 \alias{temperature_invalid}
-\title{Getting Invalid Examples and Summaries for Initial_Temp and Initial_Temp_Units}
+\title{Get Invalid Examples and Summaries for Initial_Temp and Initial_Temp_Units}
 \usage{
 temperature_invalid(data)
 }

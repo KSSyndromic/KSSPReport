@@ -15,13 +15,15 @@ pull_data(username, password, table, mft, raw, start, end)
 
 \item{mft}{The MFT (master facilities table) from where the facility names will be retrieved, as a string.}
 
+\item{raw}{Have no idea about what needs to go there.}
+
 \item{start}{The start date time that you wish to begin pulling data from, as a string.}
 
 \item{end}{The end data time that you wish to stop pulling data from, as a string.}
 }
 \value{
 A list of two data frames: first, raw data of all columns from the `table` that was called; second, just the Facility_Name
-and C_Biosense_Facility_ID from the MFT table.
+  and C_Biosense_Facility_ID from the MFT table.
 }
 \description{
 This will pull down data from NSSP's BioSense Platform. It assumes you have a valid connection to BioSense_Platform log-in.

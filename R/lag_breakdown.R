@@ -1,3 +1,8 @@
+#' Lag Breakdown
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 lag_breakdown<-function(data){
   LagTime=data%>%
     select(C_Biosense_Facility_ID, C_BioSense_ID, Arrived_Date_Time, C_Visit_Date_Time, Message_Date_Time,

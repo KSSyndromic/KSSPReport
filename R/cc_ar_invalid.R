@@ -1,4 +1,4 @@
-#' Getting Invalid Examples and Summaries for Chief_Complaint_Text and Admit_Reason_Description
+#' Get Invalid Examples and Summaries for Chief_Complaint_Text and Admit_Reason_Description
 #'
 #' This function will generate two data frames: first, a frame to be used later to extract invalid examples from;
 #' second, a frame that contains facility-level summaries for for counts and percentages of Chief_Complaint and Admit_Reason

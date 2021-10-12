@@ -1,9 +1,9 @@
 #' Write NSSP BioSense Platform Data Quality Summary Reports for One Facility
 #'
 #' @description
-#' This function is a `write_reports` function. It will generate summary report for one specified facility.
-#' The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
-#' report and creates a table. The program can send out a report to designated email address
+#'   This function is a `write_reports` function. It will generate summary report for one specified facility.
+#'   The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
+#'   report and creates a table. The program can send out a report to designated email address
 #'
 #' @param username Your BioSense username, as a string. This is the same username you may use to log into RStudio or Adminer.
 #' @param password Your BioSense password, as a string. This is the same password you may use to log into RStudio or Adminer.
@@ -25,63 +25,11 @@
 #' @param phone Your phone number to be used in your email text
 #' @param message The email message to be sent. Allows for composition of costume messages.
 #' @return A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent. 
-#' @examples 
-#' library(biosensequality)
-#' library(keyring)
-#' ## store passwords for essence
-#' key_set(service = "essence")
-#' ## store passwords for email
-#' key_set(service = "email")
-#' ## if you want the report only 
-#' write_facility_it(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    facility=3890,
-#'                    directory="~") 
-#'  ## if you want to only include field containing sex and age
-#' write_facility_it(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59", field="sex;age"
-#'                    facility=3890,
-#'                    directory="~") 
-#' ## if you want to exclude certain fields
-#' write_facility_it(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    exclude="sex;age"
-#'                    facility=3890,
-#'                    directory="~") 
-#' ## if you want to send out an email                  
-#' write_facility_it(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    facility=3890,
-#'                    directory="~",
-#'                    email =TRUE,sender='bo.zhang@@kdhe.ks.gov',receiver="bo.zhang@@kdhe.ks.gov;Greg.Crawford@@ks.gov",
-#'                    email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
-#' #' ## if you want to use costume message when sending out an email                  
-#' write_facility_it(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    facility=3890,
-#'                    directory="~",
-#'                    email =TRUE,sender='bo.zhang@@kdhe.ks.gov',receiver="bo.zhang@@kdhe.ks.gov;Greg.Crawford@@ks.gov",
-#'                    email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915',
-#'                    message="
-#'                    Hi All
-#'                    This is a testing message from *start* to *end* at the *facilityname*, please contact me, *personname*  at *phone*,*sender*. Visit the following website for more info <a href="https://www.kdheks.gov/">website</a>
-#'                    Bo Zhang")
-#'
+#' 
 #' @import dplyr
 #' @import tidyr
 #' @import openxlsx
 #' @import RODBC
-#' @import emayili
 #' @import ggplot2
 #' @importFrom stringr str_replace_all
 #' @export
@@ -454,15 +402,15 @@ write_facility_it <- function (username, password, table, mft, start, end, facil
                                    
                                    ";|,"))
         
-        emailor <- envelope() %>% from(sender) %>% to(receiver) %>%
+        emailor <- emayili::envelope() %>% emayili::from(sender) %>% emayili::to(receiver) %>%
           
-          cc("kdhe.syndromic@ks.gov") %>% subject(subject) %>%
+          emayili::cc("kdhe.syndromic@ks.gov") %>% emayili::subject(subject) %>%
           
-          html(bodytext) %>% attachment(path = paste0(directory,
+          emayili::html(bodytext) %>% emayili::attachment(path = paste0(directory,
                                                       
                                                       "/", filename, "_Overall.xlsx"))
         
-        smtp <- server(host = "smtp.office365.com", port = 587,
+        smtp <- emayili::server(host = "smtp.office365.com", port = 587,
                        
                        username = sender, password = email_password,
                        

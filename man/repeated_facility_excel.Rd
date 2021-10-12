@@ -61,8 +61,9 @@ repeated_facility_excel(
 
 \item{title}{Your job title to be used in your email text}
 
-\item{phone}{Your phone number to be used in your email text
-@param message The email message to be sent. Allows for composition of costume messages.}
+\item{phone}{Your phone number to be used in your email text}
+
+\item{message}{The email message to be sent. Allows for composition of costume messages.}
 }
 \value{
 Report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.
@@ -74,8 +75,11 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table. The program can send out a report to designated email address
 }
 \examples{
-write_facility_excel("Input.xlsx")
-repeated_facility_excel("Input.xlsx", contact = contact)
-##you can override fields from the input.xlsx
-repeated_facility_excel("Input.xlsx", contact = contact,field='age',email=F)
+\dontrun{
+  write_facility_excel("Input.xlsx")
+  repeated_facility_excel("Input.xlsx", contact = contact)
+  ##you can override fields from the input.xlsx
+  repeated_facility_excel("Input.xlsx", contact = contact,field='age',email=F)
+}
+
 }

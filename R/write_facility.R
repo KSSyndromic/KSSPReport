@@ -9,6 +9,7 @@
 #' @param password Your BioSense password, as a string. This is the same password you may use to log into RStudio or Adminer.
 #' @param table The table that you want to retrieve the data from, as a string.
 #' @param mft The MFT (master facilities table) from where the facility name will be retrieved, as a string.
+#' @param raw Again I have no idea about what goes in there
 #' @param start The start date time that you wish to begin pulling data from, as a string.
 #' @param end The end data time that you wish to stop pulling data from, as a string.
 #' @param facility The C_Biosense_Facility_ID for the facility that you wish to generate and write the report for.

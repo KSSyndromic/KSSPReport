@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_all_invalids_BZ.R
 \name{get_all_invalids_BZ}
 \alias{get_all_invalids_BZ}
-\title{Getting Invalid Summaries}
+\title{Get Invalid Summaries}
 \usage{
 get_all_invalids_BZ(data)
 }

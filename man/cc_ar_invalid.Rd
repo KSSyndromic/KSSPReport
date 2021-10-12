@@ -2,7 +2,7 @@
 % Please edit documentation in R/cc_ar_invalid.R
 \name{cc_ar_invalid}
 \alias{cc_ar_invalid}
-\title{Getting Invalid Examples and Summaries for Chief_Complaint_Text and Admit_Reason_Description}
+\title{Get Invalid Examples and Summaries for Chief_Complaint_Text and Admit_Reason_Description}
 \usage{
 cc_ar_invalid(data)
 }

@@ -71,6 +71,7 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table. The program can send out a report to designated email address
 }
 \examples{
+\dontrun{
 write_facility_excel("Input.xlsx")
 library(keyring)
 
@@ -80,11 +81,13 @@ key_set(service = "essence")
 key_set(service = "email")
 Facilities_Spreadsheet <- read_excel("Facilities Spreadsheet.xlsx", 
 sheet = "Data Quality Reports")
-contact<-as.data.frame(cbind(Facilities_Spreadsheet$C_Biosense_Facility_ID, Facilities_Spreadsheet$`Facilty Contact Email`)) 
+contact<-as.data.frame(cbind(Facilities_Spreadsheet$C_Biosense_Facility_ID, 
+Facilities_Spreadsheet$`Facilty Contact Email`)) 
 colnames(contact)=c('facility','receiver')
 repeated_facility_table(contact=contact, username="bzhang02", password=key_get("essence"),
  table="KS_PR_Processed", mft="KS_MFT",  start="2020-05-01 00:00:00", 
  end="2020-05-30 23:59:59", directory="~",
  email =TRUE,sender="bo.zhang@kdhe.ks.gov",
 email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
+}
 }

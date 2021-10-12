@@ -4,6 +4,11 @@
 ## If the input is empty, say "Missing"
 ##Facility_Type_Code
 
+#' Facility Type Code Percent
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 facility_type_code_perc<-function(data){
   number_visits=n_groups(group_by(data,C_BioSense_ID))
   

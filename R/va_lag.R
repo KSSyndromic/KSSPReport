@@ -2,7 +2,18 @@
  ## for each visit.
  ## Record: the time that the first message is entered into system; Message: the time that the first message was sent;
  ## Arrival: the time that the first message arraived at CDC; Visit: patient visit time
+
  
+#' Computes Average Time Difference between Item Pairs
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
+#'
+#' @examples
+#' \dontrun{
+#'   dfsum <- va_lag(df)
+#' }
 va_lag <- function(data) {
     LagTime=data %>% 
       select(C_Biosense_Facility_ID, Arrived_Date_Time, C_Visit_Date_Time, Message_Date_Time, Recorded_Date_Time)%>% 

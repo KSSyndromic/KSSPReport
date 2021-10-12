@@ -2,7 +2,7 @@
 % Please edit documentation in R/blood_pressure_invalid.R
 \name{blood_pressure_invalid}
 \alias{blood_pressure_invalid}
-\title{Getting Invalid Examples and Summaries for for Systolic_Diastolic_Blood_Pressure and Units}
+\title{Get Invalid Examples and Summaries for for Systolic_Diastolic_Blood_Pressure and Units}
 \usage{
 blood_pressure_invalid(data)
 }

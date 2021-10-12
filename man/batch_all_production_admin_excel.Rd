@@ -66,8 +66,12 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table.
 }
 \examples{
-library(biosensequality)
-batch_all_production_admin_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx")
-##you can override fields from the input.xlsx
-batch_all_production_admin_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx",input="Input.xlsx",email=F)
+\dontrun{
+ library(biosensequality)
+ batch_all_production_admin_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx", 
+ input="Input.xlsx")
+ ##you can override fields from the input.xlsx
+ batch_all_production_admin_excel(facility_spreadsheet="Facilities Spreadsheet_New.xlsx", 
+ input="Input.xlsx",email=F)
+} 
 }

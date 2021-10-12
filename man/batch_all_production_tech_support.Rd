@@ -58,28 +58,32 @@ batch_all_production_tech_support(
 
 \item{title}{Your job title to be used in your email text}
 
-\item{phone}{Your phone number to be used in your email text
-@param message The email message to be sent. Allows for composition of costume messages.}
+\item{phone}{Your phone number to be used in your email text}
+
+\item{message}{The email message to be sent. Allows for composition of costume messages.}
 }
 \value{
 First the program will ask if the facility spread sheet is up to date. If answer is yes, generate report table stored at directory location. If email=TRUE, then a email will be sent. A table with facility, receiver and conformation of email being sent.In addition, there will be a TechReport.csv file listing whether the email got sent.
 }
 \description{
-This function iteratively performs `write_facilty_report`  function for all Kansas Facilities in production targeted toward Tech Support. It will generate summary report for all specified facility.
+This function iteratively performs `write_facilty_it`  function for all Kansas Facilities in production targeted toward Tech Support. It will generate summary report for all specified facility.
 The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
 report and creates a table.
 }
 \examples{
-library(biosensequality)
-library(keyring)
+\dontrun{
+  library(biosensequality)
+  library(keyring)
+  
+  ## store passwords for essence
+  key_set(service = "essence")
+  ## store passwords for email
+  key_set(service = "email")
+  batch_all_production_tech_support(facility_spreadsheeet="Facilities Spreadsheet_New.xlsx", 
+  username="bzhang02", password=key_get("essence"), table="KS_PR_Processed", mft="KS_MFT",  
+  start="2020-05-01 00:00:00", end="2020-05-30 23:59:59", directory="~", 
+  email =TRUE,sender="bo.zhang@kdhe.ks.gov", email_password=key_get("email"), 
+  personname='Bo Zhang',title='intern',phone='630-457-8915')
 
-## store passwords for essence
-key_set(service = "essence")
-## store passwords for email
-key_set(service = "email")
-batch_all_production_tech_support(facility_spreadsheeet="Facilities Spreadsheet_New.xlsx", username="bzhang02", password=key_get("essence"),
- table="KS_PR_Processed", mft="KS_MFT",  start="2020-05-01 00:00:00", 
- end="2020-05-30 23:59:59", directory="~",
- email =TRUE,sender="bo.zhang@kdhe.ks.gov",
-email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
+} 
 }

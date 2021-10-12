@@ -4,6 +4,11 @@
 ## and FALSE if it is non-empty but not the valid format of YYYY-mm-dd HH:MM:SS.
 ## The output of date_time_invalid() function is similar as other _invalid functions: a list of two (examples and summary)
 
+#' Check the validity of the format of all _data_time related variables
+#'
+#' @param data a data frame
+#'
+#' @return a list
 date_time_invalid<-function(data){
   IsDate<-function(mydate,data.format="%Y-%m-%d %H:%M:%S"){
     tryCatch(!is.na(as.Date(mydate,data.format)),

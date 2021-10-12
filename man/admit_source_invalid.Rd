@@ -13,14 +13,10 @@ admit_source_invalid(data)
 A list of two data frames: examples and summary for invalid Admit_Source.
 }
 \description{
-This function will generate two data frames: first, a frame to be used later to extract invalid examples from;
-second, a frame that contains facility-level summaries for counts and percentages of invalid Admit_Source.
+Getting Invalid Examples and Summaries for Admit_Source
 }
-\details{
-The valid admit source value data were taken from the `PHVS_AdmitSource_HL7_2x_V1.xls` file from 
-Public Health Information Network Vocabulary Access and Distribution System value sets
-(https://phinvads.cdc.gov/vads/ViewView.action?name=Syndromic%20Surveillance). The package will
-be updated as the CDC provides new or different codes that are considered valid or invalid.
-
-You can view the concept codes that are considered valid by calling `data("admit_source")`.
+\examples{
+\dontrun{
+  admit_source_invalid(df)
+}
 }

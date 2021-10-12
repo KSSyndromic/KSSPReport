@@ -2,6 +2,11 @@
 ##how often each distinct entry is occurring and percentage of all visits each entry
 ##accounts for. 
 ##For varaible C_Patient_Age_Years
+#' Get variable C_Patient_Age_Years Frequency
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 age_group_perc<-function(data){
   Age_Group=data%>%
     select(C_BioSense_ID,C_Patient_Age_Years)%>%

@@ -1,4 +1,4 @@
-#' Getting Invalid Summaries
+#' Get Invalid Summaries
 #' 
 #' This function will call upon each of the functions that end with `_invalid` and combine the results from all into one data frame. All
 #' invalid checks were done at the patient-visit-level: If *one* message in a patient-visit was found to be invalid, then the whole patient visit

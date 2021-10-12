@@ -1,20 +1,18 @@
+
+
+
 #' Write NSSP BioSense Platform Data Quality Summary Reports for One Facility
 #'
-#' @description
-#' This function is a `write_reports` function. It will generate summary report for one specified facility.
-#' The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
-#' report and creates a table. The program can send out a report to designated email address
-#'
-#' @param username Your BioSense username, as a string. This is the same username you may use to log into RStudio or Adminer.
-#' @param password Your BioSense password, as a string. This is the same password you may use to log into RStudio or Adminer.
+#' @param username Your BioSense username, as a string.
+#' @param password Your BioSense password, as a string.
 #' @param table The table that you want to retrieve the data from, as a string.
-#' @param mft The MFT (master facilities table) from where the facility name will be retrieved, as a string.
+#' @param mft The MFT (master facilities table)
 #' @param start The start date time that you wish to begin pulling data from, as a string.
 #' @param end The end data time that you wish to stop pulling data from, as a string.
-#' @param facility The C_Biosense_Facility_ID for the facility that you wish to generate and write the report for.
-#' @param directory The directory where you would like to write the reports to (i.e., "~/Documents/MyReports"), as a string.
-#' @param field Default NA. Can add a string with delimiter of ':'. Only fields that countain those words will be included in the final report.
-#' @param exclude Default NA. Can add a string with delimiter of ':'. Exclude fields with certain keywords in the final report.
+#' @param facility The C_Biosense_Facility_ID for the facility that you wish to generate
+#' @param directory The directory where you would like to write the reports to 
+#' @param field Default NA. Can add a string with delimiter of
+#' @param exclude Default NA. Can add a string with delimiter of 
 #' @param optional Default True. If False then remove all optional fields
 #' @param email Default False. If True, then the function will atempt to send out a form
 #' @param sender Email address of sender. Make sure it's kdhe.KS.gov
@@ -24,78 +22,31 @@
 #' @param title Your job title to be used in your email text
 #' @param phone Your phone number to be used in your email text
 #' @param message The email message to be sent. Allows for composition of costume messages.
-#' @return A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent. 
-#' @examples 
-#' library(biosensequality)
-#' library(keyring)
-#' ## store passwords for essence
-#' key_set(service = "essence")
-#' ## store passwords for email
-#' key_set(service = "email")
-#' ## if you want the report only 
-#' write_facility_report(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    facility=3890,
-#'                    directory="~") 
-#'  ## if you want to only include field containing sex and age
-#' write_facility_report(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59", field="sex;age"
-#'                    facility=3890,
-#'                    directory="~") 
-#' ## if you want to exclude certain fields
-#' write_facility_report(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    exclude="sex;age"
-#'                    facility=3890,
-#'                    directory="~") 
-#' ## if you want to send out an email                  
-#' write_facility_report(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    facility=3890,
-#'                    directory="~",
-#'                    email =TRUE,sender='bo.zhang@@kdhe.ks.gov',receiver="bo.zhang@@kdhe.ks.gov;Greg.Crawford@@ks.gov",
-#'                    email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
-#' #' ## if you want to use costume message when sending out an email                  
-#' write_facility_report(username="bzhang02", password=key_get("essence"), 
-#'                    table="KS_PR_Processed", mft="KS_MFT",
-#'                    start="2020-06-1 00:00:00", 
-#'                    end="2020-07-31 23:59:59",
-#'                    facility=3890,
-#'                    directory="~",
-#'                    email =TRUE,sender='bo.zhang@@kdhe.ks.gov',receiver="bo.zhang@@kdhe.ks.gov;Greg.Crawford@@ks.gov",
-#'                    email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915',
-#'                    message="
-#'                    Hi All
-#'                    This is a testing message from *start* to *end* at the *facilityname*, please contact me, *personname*  at *phone*,*sender*. Visit the following website for more info <a href="https://www.kdheks.gov/">website</a>
-#'                    Bo Zhang")
-#'
-#' @import dplyr
+#' 
+#' @return A report table stored at directory location.
+#' 
 #' @import tidyr
+#' @import dplyr
 #' @import openxlsx
 #' @import RODBC
-#' @import emayili
 #' @import ggplot2
 #' @importFrom stringr str_replace_all
+#' 
 #' @export
-write_facility_report <- function(username, password, table, mft, start, end, facility, directory="",field=NA, exclude=NA, optional=TRUE, email=FALSE, sender=NA,receiver=NA,email_password=NA, personname=NA,title=NA, phone=NA,message=NA) {
-      start1=as.POSIXct(start)
-    end1=as.POSIXct(end)
+write_facility_report <- function(username, password, table, mft, start, end, facility, directory="",
+                                  field=NA, exclude=NA, optional=TRUE, email=FALSE, sender=NA, receiver=NA, 
+                                  email_password=NA, personname=NA, title=NA, phone=NA, message=NA) {
+  start1=as.POSIXct(start)
+  end1=as.POSIXct(end)
   if (start1>end1){
     stop("Error: Start time after end time")
   } else {  
-
+    
     channel <- odbcConnect("BioSense_Platform", paste0("BIOSENSE\\", username), password) # open channel
     data <- sqlQuery(
       channel,
-      paste0("SELECT * FROM ", table, " WHERE C_Visit_Date_Time >= '", start1, "' AND C_Visit_Date_Time <= '", end1, "' AND C_Biosense_Facility_ID = ", facility) # create sql query
+      paste0("SELECT * FROM ", table, " WHERE C_Visit_Date_Time >= '", start1, "' AND C_Visit_Date_Time <= '", 
+             end1, "' AND C_Biosense_Facility_ID = ", facility) # create sql query
       , as.is=TRUE)
     
     if (nrow(data) == 0) {
@@ -104,7 +55,9 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       print("The query yielded no data.")
     }
     else{
-      name <- as.character(unlist(unname(c(sqlQuery(channel, paste0("SELECT Facility_Name FROM ", mft, " WHERE C_Biosense_Facility_ID = ", facility)))))) # get name from mft
+      name <- as.character(unlist(unname(c(sqlQuery(channel, paste0("SELECT Facility_Name FROM ", mft, 
+                                                                    " WHERE C_Biosense_Facility_ID = ", 
+                                                                    facility)))))) # get name from mft
       
       odbcCloseAll() # close connection
       
@@ -112,7 +65,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
         name=name[1]
       }
       
-   
+      
       # get hl7 values
       data("hl7_values", envir=environment())
       hl7_values$Field <- as.character(hl7_values$Field)
@@ -200,17 +153,21 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       colnames(Lag)[3:5]=c("% Visit Received in <24 Hr","% Visit Received in 24-48 Hr", "% Visit Received in >48 Hr")
       filename <- str_replace_all(name, "[^[a-zA-z\\s0-9]]", "") %>% # get rid of punctuation from faciltiy name
         str_replace_all("[\\s]", "_") # replace spaces with underscores
-      sheettitle=as.data.frame(paste("Syndromic Surveillance Quality Report for",as.character(gsub('_',' ',filename)), "from",format(as.Date(start1), "%b%d,%Y"), 'to', format(as.Date(end1), "%b%d,%Y")))
+      sheettitle=as.data.frame(paste("Syndromic Surveillance Quality Report for",as.character(gsub('_',' ', filename)), 
+                                     "from",format(as.Date(start1), "%b%d,%Y"), 'to', format(as.Date(end1), 
+                                                                                             "%b%d,%Y")))
       ##create overall powerpoint
       wb <- createWorkbook()
       hs <- createStyle(fgFill="#4f81bd", halign="left", valign="top", textDecoration="bold", wrapText=TRUE)
       sheet1<- addWorksheet(wb, "Summary")
       mergeCells(wb, sheet1, cols = 1:6, rows = 1)
       writeData(wb, sheet1,sheettitle , startRow=1, colNames = F) # write table title
-      writeDataTable(wb, sheet1, overall, firstColumn=TRUE,startRow=2, headerStyle=hs, bandedRows=TRUE, colNames=TRUE,rowNames=FALSE) # write Completeness to table
+      writeDataTable(wb, sheet1, overall, firstColumn=TRUE, startRow=2, headerStyle=hs, bandedRows=TRUE, 
+                     colNames=TRUE,rowNames=FALSE) # write Completeness to table
       setColWidths(wb, sheet1, 2:ncol(overall), "auto") # format sheet
       freezePane(wb, sheet1, firstActiveRow=3) # format sheet
-      writeDataTable(wb,sheet1,Lag,startCol=1,startRow=nrow+4, headerStyle=hs, colNames=TRUE,rowNames=FALSE) #write Timeliness to table
+      writeDataTable(wb,sheet1,Lag,startCol=1,startRow=nrow+4, headerStyle=hs, colNames=TRUE, 
+                     rowNames=FALSE) #write Timeliness to table
       
       ##colorcode sheet
       negStyle <- createStyle(fontColour = "#000000", bgFill = "#FFC7CE")
@@ -233,8 +190,10 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
       
       ##insert plot of mean weekly delay plot if the time interval greater than 14 days
       if (difftime(end1,start1,units = "day")>14){
-      ggsave(file=paste0( filename, "_WeeklyDelay.png"),lag_graph(data,start1,end1),dpi = 300,path = directory,width=8, height=6, unit ="in")
-      insertImage(wb, sheet1, paste0( directory, "/", filename, "_WeeklyDelay.png"), startRow = (nrow+8), startCol = 1, width = 8, height = 6)
+        ggsave(file=paste0( filename, "_WeeklyDelay.png"),lag_graph(data,start1,end1),dpi = 300, 
+               path = directory,width=8, height=6, unit ="in")
+        insertImage(wb, sheet1, paste0( directory, "/", filename, "_WeeklyDelay.png"), 
+                    startRow = (nrow+8), startCol = 1, width = 8, height = 6)
       }
       
       # write sheet
@@ -247,15 +206,15 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
         facilityname=paste(gsub('_',' ',filename))
         subject= paste(facilityname,"Syndromic Surveillance Quality Report from KDHE")
         if (is.na(message)){
-        bodytext= paste("<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>Dear Hospital CEO / Administrator,</p>
+          bodytext= paste("<p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>Dear Hospital CEO / Administrator,</p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>&nbsp;</p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>       Attached is a bi-annual data quality report based on information provided by your Emergency Department (ED) to the Kansas Syndromic Surveillance Program (KSSP), between" , as.Date(start), " and", as.Date(end),". The syndromic surveillance program is a CDC provided program allowing state health departments, local health departments, and hospitals access to non-identifiable ED data for analysis purposes. These analyses assist health organizations in identifying possible syndromes (i.e. ILI, COVID-19, Rabies, etc.) and geographical areas of hotspots. This report contains information on completeness and validity of a select group of indicators along with timeliness, 24 hours or less, of record submittal to the Bio-Sense portal for processing. When it comes to data quality of completeness and validity the want is as close to 100 percent as possible, KSSP has an acceptable standard of 90 percent or better (>= 90% - green, < 90% - red). Your detail to data quality is greatly appreciated, as it improves our ability to detect and prevent public health problems. A more inclusive indicator report is shared with your IT group and we are always available to assist you with meeting data quality goals. We have been working with many hospitals for several years regarding public health surveillance.</p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>&nbsp;</p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'>For more information regarding the group of indicators in the report, please visit the following link:<a href='https://www.kdheks.gov/phi/download/Emergency_Department_Visit_Records_Data_Quality_Report.pdf'> Emergency Department Visit Records Data Quality Report</a>. If you have concerns or questions, please contact me,",personname,", ",title,", ", sender, " for further discussion. To learn more about the program, please visit our Kansas Syndromic Surveillance Program (KSSP)  <a href='https://www.kdheks.gov/phi/KSSP.htm'>web page</a><a href='https://www.kdheks.gov/phi/KSSP.htm'>&nbsp;</a></span><span style='color: rgb(50, 49, 48); font-family: Calibri, sans-serif; font-size: 14.6667px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;'>  . Also, the Kansas Syndromic Surveillance Program (KSSP) group can be contacted by email <a href='mailto:kdhe.syndromic@ks.gov'>kdhe.syndromic@ks.gov</a>.</span></p>
 <p style='color: rgb(50, 49, 48); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; font-size: 11pt; font-family: Calibri, sans-serif; margin: 0px;'><strong><span style='margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 14pt; line-height: inherit; font-family: inherit; vertical-align: baseline; color: inherit;'>&nbsp;</span></strong></p>")
         }else{
-              bodytext=""
-              message=unlist(strsplit(message))
+          bodytext=""
+          message=unlist(strsplit(message))
           for (j in 1:length(message)){
             if (message[j]==""){
               bodytext=paste(bodytext,"<p>&nbsp; </p>") 
@@ -270,7 +229,7 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
               bodytext=paste(bodytext,"<p>",message[j],)
             }
           }
-              
+          
         }
         
         bodytext=paste(bodytext,"
@@ -282,15 +241,15 @@ write_facility_report <- function(username, password, table, mft, start, end, fa
 ")
         receiver=unlist(strsplit(as.character(receiver), ';|,'))
         
-        emailor <- envelope() %>%
-          from(sender) %>%
-          to(receiver) %>%
-          cc("kdhe.syndromic@ks.gov") %>%
-          subject(subject) %>%
-          html(bodytext) %>%
-          attachment(path=paste0(directory, "/", filename, "_Overall.xlsx"))
+        emailor <- emayili::envelope() %>%
+          emayili::from(sender) %>%
+          emayili::to(receiver) %>%
+          emayili::cc("kdhe.syndromic@ks.gov") %>%
+          emayili::subject(subject) %>%
+          emayili::html(bodytext) %>%
+          emayili::attachment(path=paste0(directory, "/", filename, "_Overall.xlsx"))
         
-        smtp <- server(host = "smtp.office365.com",
+        smtp <- emayili::server(host = "smtp.office365.com",
                        port = 587,
                        username = sender,
                        password = email_password,

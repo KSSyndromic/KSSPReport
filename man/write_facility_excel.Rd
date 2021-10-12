@@ -64,8 +64,9 @@ write_facility_excel(
 
 \item{title}{Your job title to be used in your email text}
 
-\item{phone}{Your phone number to be used in your email text
-@param message The email message to be sent. Allows for composition of costume messages.}
+\item{phone}{Your phone number to be used in your email text}
+
+\item{message}{The email message to be sent. Allows for composition of costume messages.}
 }
 \description{
 This performs `write_facilty_report`  function for all . It will generate summary report for all specified facility.
@@ -74,8 +75,10 @@ The summary workbook shows percents and counts of nulls and invalids, Additional
 report and creates a table. The program can send out a report to designated email address
 }
 \examples{
-library(biosensequality)
-write_facility_excel("Input.xlsx")
-## You can override options from input by filling in the parameters you need to override
-write_facility_excel("Input.xlsx", email=F)
+\dontrun{
+  library(biosensequality)
+  write_facility_excel("Input.xlsx")
+  ## You can override options from input by filling in the parameters you need to override
+  write_facility_excel("Input.xlsx", email=F)
+}
 }

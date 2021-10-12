@@ -1,4 +1,4 @@
-#' Getting Invalid Examples and Summaries for for Systolic_Diastolic_Blood_Pressure and Units
+#' Get Invalid Examples and Summaries for for Systolic_Diastolic_Blood_Pressure and Units
 #'
 #' This function will generate two data frames: first, a frame to be used later to extract invalid examples from;
 #' second, a frame that contains facility-level summaries for counts and percentages of Systolic_Diastolic_Blood_Pressure

@@ -3,6 +3,11 @@
 ##accounts for.
 ## If the input is empty, say "Missing"
 ## smoking status code
+#' Calculate Percentages for smoking_status_code
+#'
+#' @param data a data frame 
+#'
+#' @return a data frame
 smoking_status_code_perc<-function(data){
   Smoking_Status_Code=data%>%
     select(C_BioSense_ID, Smoking_Status_Code)%>%

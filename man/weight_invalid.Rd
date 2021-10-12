@@ -2,7 +2,7 @@
 % Please edit documentation in R/weight_invalid.R
 \name{weight_invalid}
 \alias{weight_invalid}
-\title{Getting Invalid Examples and Summaries for Weight and Weight_Units}
+\title{Get Invalid Examples and Summaries for Weight and Weight_Units}
 \usage{
 weight_invalid(data)
 }

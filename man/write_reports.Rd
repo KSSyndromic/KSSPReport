@@ -39,6 +39,8 @@ write_reports(
 
 \item{mft}{The MFT (master facilities table) from where the facility names will be retrieved, as a string.}
 
+\item{raw}{Have no idea what goes into this variable.}
+
 \item{start}{The start date time that you wish to begin pulling data from, as a string.}
 
 \item{end}{The end data time that you wish to stop pulling data from, as a string.}

@@ -13,7 +13,7 @@ one_facility_summary(getsummary, i)
 }
 \value{
 The information for only the given facility from the given table, transposed and formatted for `write_reports` to place it in a 
-facility summary Excel workbook.
+  facility summary Excel workbook.
 }
 \description{
 This function takes a summary from `get_req_nulls`, `get_opt_nulls`, and `get_all_invalids` and returns the information for only one facility.

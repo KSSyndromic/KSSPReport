@@ -3,6 +3,11 @@
 ##accounts for. 
 ## If the input is empty, say "Missing"
 ## State
+#' Frequency of Occurrence in the Data
+#'
+#' @param data a data frame
+#'
+#' @return a data frame
 state_perc<-function(data){
   State=data%>%
     select(C_BioSense_ID, Patient_State)%>%

@@ -9,10 +9,7 @@
 #' @param fnames A data frame that includes two variables: C_Biosense_Facility_ID and Facility_Name. Make sure there is NO repeat C_Biosense_Facility_ID numbers.
 #' @param directory The directory where you would like to write the reports to (i.e., "~/Documents/MyReports"), as a string.
 #' @param nexamples An integer number of examples you would like for each type of invalid or null field in the examples workbooks for each facility.
-#' This defaults to 0, which will not generate these example workbooks.
-#' @param offset The number of hours you wish to offset Arrived_Date_Time (which is in UTC). The offset value is how far off your local time zone is from UTC. 
-#' For example, the Central Time Zone would set this to 5 or 6, depending on if it is daylight savings or not. This value should be an integer. 
-#' This is used for timeliness reports using the `va_lag` function.
+#'   This defaults to 0, which will not generate these example workbooks.
 #' @import dplyr
 #' @import tidyr
 #' @import openxlsx

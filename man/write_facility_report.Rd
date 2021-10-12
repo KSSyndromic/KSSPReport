@@ -27,25 +27,25 @@ write_facility_report(
 )
 }
 \arguments{
-\item{username}{Your BioSense username, as a string. This is the same username you may use to log into RStudio or Adminer.}
+\item{username}{Your BioSense username, as a string.}
 
-\item{password}{Your BioSense password, as a string. This is the same password you may use to log into RStudio or Adminer.}
+\item{password}{Your BioSense password, as a string.}
 
 \item{table}{The table that you want to retrieve the data from, as a string.}
 
-\item{mft}{The MFT (master facilities table) from where the facility name will be retrieved, as a string.}
+\item{mft}{The MFT (master facilities table)}
 
 \item{start}{The start date time that you wish to begin pulling data from, as a string.}
 
 \item{end}{The end data time that you wish to stop pulling data from, as a string.}
 
-\item{facility}{The C_Biosense_Facility_ID for the facility that you wish to generate and write the report for.}
+\item{facility}{The C_Biosense_Facility_ID for the facility that you wish to generate}
 
-\item{directory}{The directory where you would like to write the reports to (i.e., "~/Documents/MyReports"), as a string.}
+\item{directory}{The directory where you would like to write the reports to}
 
-\item{field}{Default NA. Can add a string with delimiter of ':'. Only fields that countain those words will be included in the final report.}
+\item{field}{Default NA. Can add a string with delimiter of}
 
-\item{exclude}{Default NA. Can add a string with delimiter of ':'. Exclude fields with certain keywords in the final report.}
+\item{exclude}{Default NA. Can add a string with delimiter of}
 
 \item{optional}{Default True. If False then remove all optional fields}
 
@@ -66,63 +66,8 @@ write_facility_report(
 \item{message}{The email message to be sent. Allows for composition of costume messages.}
 }
 \value{
-A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent.
+A report table stored at directory location.
 }
 \description{
-This function is a `write_reports` function. It will generate summary report for one specified facility.
-The summary workbook shows percents and counts of nulls and invalids, Additionally it generates a timeliness
-report and creates a table. The program can send out a report to designated email address
-}
-\examples{
-library(biosensequality)
-library(keyring)
-## store passwords for essence
-key_set(service = "essence")
-## store passwords for email
-key_set(service = "email")
-## if you want the report only 
-write_facility_report(username="bzhang02", password=key_get("essence"), 
-                   table="KS_PR_Processed", mft="KS_MFT",
-                   start="2020-06-1 00:00:00", 
-                   end="2020-07-31 23:59:59",
-                   facility=3890,
-                   directory="~") 
- ## if you want to only include field containing sex and age
-write_facility_report(username="bzhang02", password=key_get("essence"), 
-                   table="KS_PR_Processed", mft="KS_MFT",
-                   start="2020-06-1 00:00:00", 
-                   end="2020-07-31 23:59:59", field="sex;age"
-                   facility=3890,
-                   directory="~") 
-## if you want to exclude certain fields
-write_facility_report(username="bzhang02", password=key_get("essence"), 
-                   table="KS_PR_Processed", mft="KS_MFT",
-                   start="2020-06-1 00:00:00", 
-                   end="2020-07-31 23:59:59",
-                   exclude=field
-                   facility=3890,
-                   directory="~") 
-## if you want to send out an email                  
-write_facility_report(username="bzhang02", password=key_get("essence"), 
-                   table="KS_PR_Processed", mft="KS_MFT",
-                   start="2020-06-1 00:00:00", 
-                   end="2020-07-31 23:59:59",
-                   facility=3890,
-                   directory="~",
-                   email =TRUE,sender='bo.zhang@kdhe.ks.gov',receiver="bo.zhang@kdhe.ks.gov;Greg.Crawford@ks.gov",
-                   email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915')
-#' ## if you want to use costume message when sending out an email                  
-write_facility_report(username="bzhang02", password=key_get("essence"), 
-                   table="KS_PR_Processed", mft="KS_MFT",
-                   start="2020-06-1 00:00:00", 
-                   end="2020-07-31 23:59:59",
-                   facility=3890,
-                   directory="~",
-                   email =TRUE,sender='bo.zhang@kdhe.ks.gov',receiver="bo.zhang@kdhe.ks.gov;Greg.Crawford@ks.gov",
-                   email_password=key_get("email"),personname='Bo Zhang',title='intern',phone='630-457-8915',
-                   message="
-                   Hi All
-                   This is a testing message from *start* to *end* at the *facilityname*, please contact me, *personname*  at *phone*,*sender*. Visit the following website for more info <a href="https://www.kdheks.gov/">website</a>
-                   Bo Zhang")
-
+Write NSSP BioSense Platform Data Quality Summary Reports for One Facility
 }
