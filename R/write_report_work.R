@@ -362,7 +362,7 @@ write_reports <- function(username, password, table, mft,raw, start, end, direct
     invalid_examples <- list(admit_source_invalid(data)[[1]], # 1
                              age_invalid(data)[[1]], # 2
                              any_e_invalid(data)[[1]], # 3
-                             blood_pressure_invalid(data)[[1]], # 4
+                             # blood_pressure_invalid(data)[[1]], # 4
                              cc_ar_invalid(data)[[1]], # 5
                              country_invalid(data)[[1]], # 6
                              death_invalid(data)[[1]], # 7

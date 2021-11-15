@@ -16,7 +16,7 @@ get_opt_nulls_BZ <- function(data) {
   opt_pv_fields <- c("Birth_Date_Time", "Admit_Source", "Initial_Temp", "Initial_Temp_Units", "Problem_List_Code", 
                      "Problem_List_Description", "Medication_List", "Medication_Code", "Medication_Description", 
                      "Travel_History", "Initial_Pulse_Oximetry", "Initial_Pulse_Oximetry_Units","Triage_Notes", 
-                     "Clinical_Impression", "Systolic_Diastolic_Blood_Pressure", "Systolic_Diastolic_Blood_Pressure_Units") # fields optional once per visit
+                     "Clinical_Impression") # fields optional once per visit
   opt_pv_pctnames <- unlist(lapply(opt_pv_fields, function(x) paste0(x, ".Percent"))) # creating names for the file
   opt_pv_cntnames <- unlist(lapply(opt_pv_fields, function(x) paste0(x, ".Count"))) # creating names for the file
   

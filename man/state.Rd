@@ -11,8 +11,8 @@ Look-up table of US states and territories
 \format{
   A data frame with 69 observations on the following 9 variables.
   \describe{
-    \item{\samp{Concept Code}}{a character vector}
-    \item{\samp{Concept Name}}{a character vector}
+    \item{\samp{Concept.Code}}{a character vector}
+    \item{\samp{Concept.Name}}{a character vector}
     \item{\samp{Preferred Concept Name}}{a character vector}
     \item{\samp{Preferred Alternate Code}}{a character vector}
     \item{\samp{Code System OID}}{a character vector}

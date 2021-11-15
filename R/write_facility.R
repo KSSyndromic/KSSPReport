@@ -303,7 +303,7 @@ write_facility <- function(username, password, table, mft, raw, start, end, faci
     invalid_examples <- list(admit_source_invalid(data)[[1]], # 1
                              age_invalid(data)[[1]], # 2
                              any_e_invalid(data)[[1]], # 3
-                             blood_pressure_invalid(data)[[1]], # 4
+                             # blood_pressure_invalid(data)[[1]], # 4
                              cc_ar_invalid(data)[[1]], # 5
                              country_invalid(data)[[1]], # 6
                              county_invalid(data)[[1]], # 7
@@ -344,9 +344,7 @@ write_facility <- function(username, password, table, mft, raw, start, end, faci
                               Smoking_Status_Code, Smoking_Status_Description,
                               Initial_Temp, Initial_Temp_Units,
                               Initial_Pulse_Oximetry, Initial_Pulse_Oximetry_Units,
-                              Death_Date_Time, C_Death, Discharge_Disposition, Discharge_Date_Time,
-                              Systolic_Blood_Pressure, Systolic_Blood_Pressure_Units,
-                              Diastolic_Blood_Pressure, Diastolic_Blood_Pressure_Units)),
+                              Death_Date_Time, C_Death, Discharge_Disposition, Discharge_Date_Time)),
                   by="C_BioSense_ID") %>% # join with all these fields, for every record of that visit
         rename(Invalid_Field=Field) %>% # make it clearer that that field is the one that is invalid
         group_by(Invalid_Field) %>% # group by type of field
@@ -367,9 +365,7 @@ write_facility <- function(username, password, table, mft, raw, start, end, faci
                                     Smoking_Status_Code, Smoking_Status_Description,
                                     Initial_Temp, Initial_Temp_Units,
                                     Initial_Pulse_Oximetry, Initial_Pulse_Oximetry_Units,
-                                    Death_Date_Time, C_Death, Discharge_Disposition, Discharge_Date_Time,
-                                    Systolic_Blood_Pressure, Systolic_Blood_Pressure_Units,
-                                    Diastolic_Blood_Pressure, Diastolic_Blood_Pressure_Units)),
+                                    Death_Date_Time, C_Death, Discharge_Disposition, Discharge_Date_Time)),
                   by="C_BioSense_ID") %>% # join with all these fields, for every record of that visit
         group_by(Null_Field) %>% # group by type of field
         slice(1:nexamples) # get nexamples

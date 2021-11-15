@@ -42,11 +42,11 @@ examples_invalids <- function(i, invalid_examples) {
     full_join(output, by="C_BioSense_ID")
 
   ## blood pressure units
-  output <- invalid_examples[[4]] %>%
-    filter(C_Biosense_Facility_ID==i & Invalid_Blood_Pressure_Units==TRUE) %>%
-    select(C_BioSense_ID, Systolic_Diastolic_Blood_Pressure_Units) %>%
-    distinct() %>%
-    full_join(output, by="C_BioSense_ID")
+  # output <- invalid_examples[[4]] %>%
+  #   filter(C_Biosense_Facility_ID==i & Invalid_Blood_Pressure_Units==TRUE) %>%
+  #   select(C_BioSense_ID, Systolic_Diastolic_Blood_Pressure_Units) %>%
+  #   distinct() %>%
+  #   full_join(output, by="C_BioSense_ID")
 
   ## missing bp units
   output <- invalid_examples[[4]] %>%
