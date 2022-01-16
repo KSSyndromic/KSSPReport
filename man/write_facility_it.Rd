@@ -23,7 +23,8 @@ write_facility_it(
   personname = NA,
   title = NA,
   phone = NA,
-  message = NA
+  message = NA,
+  facility_type = NULL
 )
 }
 \arguments{
@@ -64,6 +65,8 @@ write_facility_it(
 \item{phone}{Your phone number to be used in your email text}
 
 \item{message}{The email message to be sent. Allows for composition of costume messages.}
+
+\item{facility_type}{a character vector indicating the facility type}
 }
 \value{
 A report table stored at directory location. If email=TRUE, then a email will be sent, along with a confirmation of email being sent.

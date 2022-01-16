@@ -14,7 +14,7 @@ get_all_invalids_BZ <- function(data) {
   # merge all invalid summaries
   # make summaries into a list
   invalid_summaries <- list(admit_source_invalid(data)[[2]], age_invalid(data)[[2]], any_e_invalid(data)[[2]],
-                            blood_pressure_invalid(data)[[2]], cc_ar_invalid(data)[[2]], country_invalid(data)[[2]],
+                            cc_ar_invalid(data)[[2]], country_invalid(data)[[2]],
                             county_invalid(data)[[2]], date_time_invalid(data)[[2]],
                             death_invalid(data)[[2]], diagnosis_code_invalid(data)[[2]],diagnosis_type_invalid(data)[[2]], 
                             discharge_disposition_invalid(data)[[2]], ethnicity_invalid(data)[[2]], 
@@ -39,8 +39,8 @@ get_all_invalids_BZ <- function(data) {
     select(-c(Missing_Death_Date_Time_Given_Indicator, Missing_Death_Given_Discharge_Disposition, Missing_Death_Indicator_Given_Date_Time,
               Height_Missing_Given_Height_Units,Height_Units_Missing_Given_Height,Initial_Pulse_Oximetry_Missing_Given_Units,
               Initial_Pulse_Oximetry_Units_Missing_Given_Pulse,Initial_Temp_Missing_Given_Units,Initial_Temp_Units_Missing_Given_Temp,
-              Initial_Temp_Out_Of_Range,FPID_MRN_Mismatch,Systolic_Diastolic_Blood_Pressure_Missing_Given_BP_Units,
-              Systolic_Diastolic_Blood_Pressure_Units_Missing_Given_BP,Visits_With_No_E_Pt_Class,Weight_Missing_Given_Weight_Units,Weight_Units_Missing_Given_Weight,
+              Initial_Temp_Out_Of_Range,FPID_MRN_Mismatch,
+              Visits_With_No_E_Pt_Class, Weight_Missing_Given_Weight_Units, Weight_Units_Missing_Given_Weight,
               Admit_Reason_Description_Short,Create_Processed_Date_Time,Create_Raw_Date_Time,Update_Processed_Date_Time)) %>%
     as.data.frame() # make as a classic data frame for writing to xlsx
   state_invalids[state_invalids=="NaN"] <- NA # replace nan with na

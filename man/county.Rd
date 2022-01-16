@@ -11,8 +11,8 @@ Countains a list of US Counties
 \format{
   A data frame with 3281 observations on the following 3 variables.
   \describe{
-    \item{\samp{Concept Code}}{a character vector}
-    \item{\samp{Concept Name}}{a character vector}
+    \item{\samp{Concept.Code}}{a character vector}
+    \item{\samp{Concept.Name}}{a character vector}
     \item{\samp{Preferred Concept Name}}{a character vector}
   }
 }

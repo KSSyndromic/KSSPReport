@@ -1,7 +1,7 @@
 Package: biosensequality
 Title: Data Quality Report Generator for NSSP BioSense Platform
-Version: 2.0.0.9003
-Date: 2021-10-20
+Version: 2.0.1.9004
+Date: 2021-11-20
 Authors@R: c(person("Bo", "Zhang", email = "b021z055@kumc.edu", role = c("aut")), 
     person("Bo", "Zhang", email = "b021z055@kumc.edu", role = c("cre")))
 Description: This package, developed at the Kansas Department of Health and Environment, 
@@ -24,4 +24,4 @@ Imports:
   yesno
 RoxygenNote: 7.1.2
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)

@@ -22,8 +22,8 @@ weight_invalid <- function(data) {
   data("weight_units", envir=environment())
   
   valid_weight_values <- weight_units %>% # take file
-    select(Concept.Name) %>% # the variable we want is called concept name
-    filter(!is.na(Concept.Name)) %>% # get rid of any nas
+    select(`Preferred Concept Name`) %>% # the variable we want is called concept name
+    filter(!is.na(`Preferred Concept Name`)) %>% # get rid of any nas
     c() %>% # turn this into a vector
     unlist() %>% # unlist them from the concept name object 
     unname() %>% # unname stuff

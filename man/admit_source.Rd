@@ -11,8 +11,8 @@ List of admission sources
 \format{
   A data frame with 9 observations on the following 9 variables.
   \describe{
-    \item{\samp{Concept Code}}{a numeric vector}
-    \item{\samp{Concept Name}}{a character vector}
+    \item{\samp{Concept.Code}}{a numeric vector}
+    \item{\samp{Concept.Name}}{a character vector}
     \item{\samp{Preferred Concept Name}}{a character vector}
     \item{\samp{Preferred Alternate Code}}{a logical vector}
     \item{\samp{Code System OID}}{a character vector}

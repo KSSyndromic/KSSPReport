@@ -23,7 +23,8 @@ write_facility_report(
   personname = NA,
   title = NA,
   phone = NA,
-  message = NA
+  message = NA,
+  facility_type = NULL
 )
 }
 \arguments{
@@ -64,6 +65,8 @@ write_facility_report(
 \item{phone}{Your phone number to be used in your email text}
 
 \item{message}{The email message to be sent. Allows for composition of costume messages.}
+
+\item{facility_type}{a character vector indicating the facility type}
 }
 \value{
 A report table stored at directory location.

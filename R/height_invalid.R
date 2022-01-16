@@ -24,8 +24,8 @@ height_invalid <- function(data) {
   data("height_units", envir=environment())
   
   valid_height_values <- height_units %>% # what we want is on the second sheet
-    select(Concept.Name) %>% # the variable we want is called concept name
-    filter(!is.na(Concept.Name)) %>% # get rid of any nas
+    select(`Preferred Concept Name`) %>% # the variable we want is called concept name
+    filter(!is.na(`Preferred Concept Name`)) %>% # get rid of any nas
     c() %>% # turn this into a vector
     unlist() %>% # unlist them from the concept name object 
     unname() %>% # unname stuff

@@ -11,8 +11,8 @@ Contains list of age unit options
 \format{
   A data frame with 5 observations on the following 9 variables.
   \describe{
-    \item{\samp{Concept Code}}{a character vector}
-    \item{\samp{Concept Name}}{a character vector}
+    \item{\samp{Concept.Code}}{a character vector}
+    \item{\samp{Concept.Name}}{a character vector}
     \item{\samp{Preferred Concept Name}}{a character vector}
     \item{\samp{Preferred Alternate Code}}{a character vector}
     \item{\samp{Code System OID}}{a character vector}
