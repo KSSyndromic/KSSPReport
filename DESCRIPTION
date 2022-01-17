@@ -2,7 +2,7 @@ Package: biosensequality
 Title: Data Quality Report Generator for NSSP BioSense Platform
 Version: 2.0.1.9004
 Date: 2021-11-20
-Authors@R: c(person("Bo", "Zhang", email = "b021z055@kumc.edu", role = c("aut")), 
+Authors@R: c(person("Henri", "Menager", email = "henri.menager@ks.gov", role = c("aut")), 
     person("Bo", "Zhang", email = "b021z055@kumc.edu", role = c("cre")))
 Description: This package, developed at the Kansas Department of Health and Environment, 
     queries the NSSP BioSense Platform for a given date range and generates Excel documents 
